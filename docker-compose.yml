@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+
+  iris:
+    build:
+      context: .
+    image: tc_innovation_toolkit
+    hostname: iris
+    command: -b "sudo service apache2 start"
+    ports:
+    - "81:52773"
+    - "443:443"
+    - "51773:51773"
