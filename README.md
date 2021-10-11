@@ -9,7 +9,7 @@
 
 docker-compose up --build
 
-##Sample Configurations
+## Sample Configurations
 
 you will need to have access to Healthcare Medssaging Framework (HMF) and TrakCare API to use the toolkit 
 
@@ -19,11 +19,11 @@ Sample HMF Configuration \
 	Port 		: 57772 \
 	Web App 	: /csp/healthshare/trak-hmf/services/ \
 	User 		: superuser \
-	Password	: ********	\
+	Password	: ********	
 	
 Sample API User 
 	User Name 	: isc \
-	Password	: ***** \
+	Password	: ***** 
 
 ## How to configure
 
