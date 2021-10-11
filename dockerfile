@@ -37,7 +37,7 @@ RUN a2ensite httpd-csp && update-rc.d apache2 enable
 
 USER irisowner
 
-RUN echo "changeme" > /tmp/password.txt && /usr/irissys/dev/Container/changePassword.sh /tmp/password.txt
+RUN echo "password" > /tmp/password.txt && /usr/irissys/dev/Container/changePassword.sh /tmp/password.txt
 
 COPY . /tmp/src
 
