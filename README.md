@@ -25,7 +25,7 @@ Sample API User
 	User Name 	: isc \
 	Password	: ***** 
 
-## How to configure
+## How to Configure
 
 Go to Innovation Toolkit Home Page\
 https://localhost/csp/healthshare/trakitkit/TCITK.UI.Home.cls \
@@ -35,13 +35,13 @@ Goto FHIR Configurations Page
 
 https://localhost/csp/healthshare/trakitkit/TCITK.UI.Welcome.cls
 
-Click on HMF Conigure HMF Web services , add all details required and save 
-Click on Configure TrakCare API Access , enter TrakCare API user and save 
+Click on HMF Conigure HMF Web services , add all details required and save \
+Click on Configure TrakCare API Access , enter TrakCare API user and save \
 
 all done !!!!
 
 
-
+## How to Use
 
 
 
