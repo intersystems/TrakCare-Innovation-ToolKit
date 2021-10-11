@@ -36,7 +36,7 @@ Goto FHIR Configurations Page
 https://localhost/csp/healthshare/trakitkit/TCITK.UI.Welcome.cls
 
 Click on HMF Conigure HMF Web services , add all details required and save \
-Click on Configure TrakCare API Access , enter TrakCare API user and save \
+Click on Configure TrakCare API Access , enter TrakCare API user and save 
 
 all done !!!!
 
