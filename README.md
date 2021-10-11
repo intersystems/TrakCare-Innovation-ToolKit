@@ -3,7 +3,8 @@
 
 	1-Docker
 	2-Docker Compose
-	3- TrakCare V2019+
+	3- TrakCare T2019+
+	
 ## Run
 
 docker-compose up --build
@@ -19,9 +20,10 @@ Sample HMF Configuration \
 	Web App 	: /csp/healthshare/trak-hmf/services/ \
 	User 		: superuser \
 	Password	: ********	\
-Sample API User :
-	User Name 	: isc\
-	Password	: *****\
+	
+Sample API User 
+	User Name 	: isc \
+	Password	: ***** \
 
 ## How to configure
 
