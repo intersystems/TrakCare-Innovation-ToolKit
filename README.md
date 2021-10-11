@@ -1,5 +1,6 @@
 # TrakCare Innovation KIT
-# Prequists 
+
+## Prerequisites 
 
 	1-Docker
 	2-Docker Compose
