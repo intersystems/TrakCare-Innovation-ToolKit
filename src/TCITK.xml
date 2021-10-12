@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="IRIS" version="26" zv="IRIS for UNIX (Ubuntu Server LTS for x86-64 Containers) 2020.2 (Build 204U)" ts="2021-10-11 13:30:42">
+<Export generator="IRIS" version="26" zv="IRIS for UNIX (Ubuntu Server LTS for x86-64 Containers) 2020.2 (Build 204U)" ts="2021-10-12 14:19:59">
 
 
 <Class name="TC.hmf.FHIR.Demo.SDA.DemoPatient">
@@ -23978,31 +23978,31 @@
 <Class name="TC.hmf.FHIR.Installer.FHIR">
 <IncludeCode>HS.HC,HS.FHIRServer</IncludeCode>
 <Super>HS.HC.Util.Installer</Super>
-<TimeChanged>66027,32844.300796</TimeChanged>
+<TimeChanged>66029,51538.474753</TimeChanged>
 <TimeCreated>65998,36183.100722</TimeCreated>
 
 <Parameter name="IRISUserName">
-<Default>superuser</Default>
+<Default>demo</Default>
 </Parameter>
 
 <Parameter name="IRISUserPassword">
-<Default>isc123</Default>
+<Default>demo</Default>
 </Parameter>
 
 <Parameter name="TCQueryWebServiceURL">
-<Default>http://172.27.97.50:57772/csp/healthshare/trak/TC.hmf.System.Service.Inbound.Query.cls</Default>
+<Default>http://localhost:57772/csp/healthshare/trak/TC.hmf.System.Service.Inbound.Query.cls</Default>
 </Parameter>
 
 <Parameter name="TCOutboundWebServiceURL">
-<Default>http://172.27.97.50:57772/csp/healthshare/trak/TC.hmf.System.Service.Inbound.SOAP.cls</Default>
+<Default>http://localhost:57772/csp/healthshare/trak/TC.hmf.System.Service.Inbound.SOAP.cls</Default>
 </Parameter>
 
 <Parameter name="TCAPIWebServiceURL">
-<Default>http://172.27.97.50:57772/csp/healthshare/trak/TC.hmf.System.Service.Inbound.SYSAPI.cls</Default>
+<Default>http://localhost:57772/csp/healthshare/trak/TC.hmf.System.Service.Inbound.SYSAPI.cls</Default>
 </Parameter>
 
 <Parameter name="TCAPIUserName">
-<Default>isc</Default>
+<Default>demo</Default>
 </Parameter>
 
 <Parameter name="TCAPIUserPassword">
@@ -30763,7 +30763,7 @@ This Parameter is updated by Perforce</Description>
 
 
 
-<Project name="TCITK" LastModified="2021-10-10 09:08:53.971792">
+<Project name="TCITK" LastModified="2021-10-12 10:41:29.307643">
   <Items>
     <ProjectItem name="Local.FromSDALabTestItemCode.LUT" type="LUT"></ProjectItem>
     <ProjectItem name="Local.FromSDAObservationCode.LUT" type="LUT"></ProjectItem>
@@ -36126,7 +36126,7 @@ This XML block defines the contents of the menu pane.</Description>
 <Description>
 Define and manage FHIR CSP application behaviors that are not covered in CSP application maintenance.</Description>
 <Super>TCITK.UI.Util</Super>
-<TimeChanged>66027,32201.362174</TimeChanged>
+<TimeChanged>66028,58131.483737</TimeChanged>
 <TimeCreated>65468,76707.179559</TimeCreated>
 
 <Parameter name="APPLICATION">
@@ -36365,7 +36365,7 @@ title="" />
  	if pExport=1
  	{
 	 	 zn currentNS
-	 	q ##class(TCITK.UI.Postman).GetJSON(tRequestURL,tEndpoint,tAction,tFHIRVersion)
+	 	q ##class(TCITK.UI.Postman).GetJSON(baseURL_tRequestURL,tEndpoint,tAction,tFHIRVersion)
  	}
  
  	if ((tFHIRVersion="DSTU2") || (tFHIRVersion="STU3"))
