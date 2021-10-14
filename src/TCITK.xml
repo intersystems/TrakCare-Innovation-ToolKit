@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="IRIS" version="26" zv="IRIS for UNIX (Ubuntu Server LTS for x86-64 Containers) 2020.2 (Build 204U)" ts="2021-10-12 14:19:59">
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2021.2 (Build 593U)" ts="2021-10-14 12:08:35">
 
 
 <Class name="TC.hmf.FHIR.Demo.SDA.DemoPatient">
@@ -23978,7 +23978,7 @@
 <Class name="TC.hmf.FHIR.Installer.FHIR">
 <IncludeCode>HS.HC,HS.FHIRServer</IncludeCode>
 <Super>HS.HC.Util.Installer</Super>
-<TimeChanged>66029,51538.474753</TimeChanged>
+<TimeChanged>66031,43707.1707289</TimeChanged>
 <TimeCreated>65998,36183.100722</TimeCreated>
 
 <Parameter name="IRISUserName">
@@ -24200,7 +24200,7 @@
 <ClassMethod>1</ClassMethod>
 <FormalSpec>codepath=""</FormalSpec>
 <Implementation><![CDATA[
-	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIRDemo()
+	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIRDemo("C:\TrakCare-Innovation-ToolKit\src\")
 
 	do ..InstallFHIR("DSTU2","",codepath)
 	//do ..InstallFHIR("STU3","",codepath)
@@ -24762,7 +24762,7 @@
 		Set newOperation.ClassName = "TrakCare.WebServices.SYSAPI.Production.Service.TChmfServiceTrakInboundSYSAPISoap"
 		Set settings = 0
 		Set settings($I(settings)) = $lb("Host","TRAKAPIConfigName",TCAPIOperation)
-		Set settings($I(settings)) = $lb("Host","Timeout",300)
+		Set settings($I(settings)) = $lb("Host","Timeout",600)
 		set newOperation.LogTraceEvents=1
 		Do newOperation.UpdateSettings(.settings)
 		Do production.Items.Insert(newOperation)
@@ -24902,7 +24902,7 @@ utility to be called by chart to show the smart app </Description>
 
 <Class name="TC.hmf.FHIR.Installer.Oauth2">
 <Super>%RegisteredObject</Super>
-<TimeChanged>66023,21867.214474</TimeChanged>
+<TimeChanged>66030,45614.4333703</TimeChanged>
 <TimeCreated>66006,15612.530814</TimeCreated>
 
 <Method name="Setup">
@@ -24990,17 +24990,22 @@ utility to be called by chart to show the smart app </Description>
 <Implementation><![CDATA[
 	set currentNS = $Namespace
 	zn "%SYS"
-    Set tSC = $$$OK
-	Set sys = ##class(OAuth2.ServerDefinition).%New()
-	Set sys.IssuerEndpoint = "https://localhost/oauth2"
-	Set sys.SSLConfiguration = "OAuth2.SSL"
-	Set sys.IsDiscovery = 1
-	zw ##class(OAuth2.ServerDefinition).GetServerMetadata("https://localhost/oauth2","OAuth2.SSL",.metadata)
-
-	Set sys.Metadata = metadata
-
-	Set tSC = sys.%Save()
-		
+    	Set tSC = $$$OK
+    	try
+    	{
+		Set sys = ##class(OAuth2.ServerDefinition).%New()
+		Set sys.IssuerEndpoint = "https://localhost/oauth2"
+		Set sys.SSLConfiguration = "OAuth2.SSL"
+		Set sys.IsDiscovery = 1
+		zw ##class(OAuth2.ServerDefinition).GetServerMetadata("https://localhost/oauth2","OAuth2.SSL",.metadata)
+		Set sys.Metadata = metadata
+		Set tSC = sys.%Save()
+    	}
+    	catch
+    	{
+	    	
+	 	w !,"Error , looks like SSL not enabled "   	
+    	}
 
 	zn currentNS
 
@@ -27480,7 +27485,7 @@ This Parameter is updated by Perforce</Description>
 <Class name="TC.hmf.FHIR.Server.Process.FHIRRouter">
 <IncludeCode>HS.HC</IncludeCode>
 <Super>Ens.BusinessProcess,HS.FHIR.FromSDA.DTL.Base</Super>
-<TimeChanged>66027,30623.092488</TimeChanged>
+<TimeChanged>66031,39582.5172108</TimeChanged>
 <TimeCreated>65420,51234.627704</TimeCreated>
 
 <Parameter name="SETTINGS">
@@ -27638,6 +27643,10 @@ to be derived from the FHIRVersion setting on this business host.</Description>
 			if pRequest.Request.RequestMethod="POST"
 			{
 				set tSC = ..PostFHIR(pRequest, .pResponse)
+			}
+			elseif pRequest.Request.RequestMethod="DELETE"
+			{
+				set tSC = ..SendRequestSync(..FHIRRepoConfigName, pRequest, .pResponse)
 			}
 			elseif pRequest.Request.RequestMethod="GET"
 			{
@@ -28166,7 +28175,7 @@ Get TrakCare Patient SDA from TC MRN and inserts into FHIR repository</Descripti
 	}
  	elseif ((..FHIRVersion="R4")||(..FHIRVersion="R3"))
 	{
-		set tSC=..InsertPatientFHIRJSON(pMRN,"POST",.pBundleStream,.pFHIRResponse)
+		set tSC=..InsertPatientFHIRJSON(pMRN,"PUT",.pBundleStream,.pFHIRResponse)
 	}
 	quit tSC
 ]]></Implementation>
@@ -28262,7 +28271,7 @@ Get TrakCare Patient SDA from TC MRN and inserts into FHIR repository</Descripti
 </Method>
 
 <Method name="InsertPatientFHIRJSON">
-<FormalSpec>pMRN,Interaction="POST",pBundleStream,*tFHIRResponse</FormalSpec>
+<FormalSpec>pMRN,Interaction="PUT",pBundleStream,*tFHIRResponse</FormalSpec>
 <Implementation><![CDATA[
 	
 	set tFHIRRequest=$classmethod("HS.FHIRServer.Interop.Request","%New")
@@ -28271,11 +28280,10 @@ Get TrakCare Patient SDA from TC MRN and inserts into FHIR repository</Descripti
 	set tFHIRRequest.QuickStreamId = tQuickStream.%Id()
 	set tSC = tQuickStream.CopyFrom(pBundleStream)
 	set tFHIRRequest.Request.SessionId = ""
-	set tFHIRRequest.Request.Interaction =Interaction
 	set tFHIRRequest.Request.SessionApplication=..SessionApplication  
 	set tFHIRRequest.Request.ResponseFormatCode="JSON"
 	set tFHIRRequest.Request.RequestFormatCode="JSON"
-	if Interaction="POST"
+	if Interaction="PUT"
 	{
 		set tFHIRRequest.Request.RequestPath=""
 	}
@@ -28283,7 +28291,7 @@ Get TrakCare Patient SDA from TC MRN and inserts into FHIR repository</Descripti
 	{
 		set tFHIRRequest.Request.RequestPath="/Patient/"_pMRN
 	}
-	set tFHIRRequest.Request.RequestMethod=Interaction
+	set tFHIRRequest.Request.RequestMethod="POST"
 	$$$TRACE("before request")
 	
 	set tSC = ..SendRequestSync(..FHIRRepoConfigName, tFHIRRequest, .tFHIRResponse)
@@ -29124,7 +29132,7 @@ Business host to which to forward the api request message.</Description>
 <Description>
 utility to clean patient data from FHIR repositry </Description>
 <Super>%RegisteredObject</Super>
-<TimeChanged>66010,31008.472216</TimeChanged>
+<TimeChanged>66031,39423.4820228</TimeChanged>
 <TimeCreated>65839,59668.728224</TimeCreated>
 
 <UDLText name="T">
@@ -29139,6 +29147,8 @@ utility to clean patient data from FHIR repositry </Description>
 <FormalSpec>PatientID,pFHIRVersion,appname</FormalSpec>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
+	
+	 
 	
 	if (pFHIRVersion="DSTU2")
 	{
@@ -29239,7 +29249,6 @@ utility to clean patient data from FHIR repositry </Description>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
 	//do ##class(TC.hmf.FHIR.Server.Utils).CleanupvJSONVR4PatData("0018290")
-	
 	set sc=$$$OK
 	//get list of FHIR resources linked to patient
 	&SQL(
@@ -29262,10 +29271,72 @@ utility to clean patient data from FHIR repositry </Description>
 		&SQL(FETCH RESJSON INTO :tLocalRes)
 	}
 	&SQL(CLOSE RESJSON)
-	
-	
-	
+
 	quit sc
+]]></Implementation>
+</Method>
+
+<Method name="CleanupFHIRAllData">
+<Description>
+ Call Delete API to cleanup JSON V3 patient clinical data from FHIR Repository</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>package,debug=0</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	//do ##class(TC.hmf.FHIR.Server.Utils).CleanupvJSONVR4PatData("0018290")
+	set sc=$$$OK
+	//get list of FHIR resources linked to patient
+	&SQL(
+		DECLARE RESJSON CURSOR FOR
+		SELECT parent FROM %Dictionary.PropertyDefinition
+		WHERE parent LIKE :package||'%'
+	)
+	&SQL(OPEN RESJSON)
+	&SQL(FETCH RESJSON INTO :tLocalRes)
+	set listcnt=0
+	set resList=""
+	//loop through each table in fhir repository and cleanup patient clinical data
+	while 'SQLCODE {
+		
+		set table=..GetSQLTableName(tLocalRes)
+		set sql="delete  "_table_" "
+		write:debug !,sql
+		set rset=$system.SQL.Execute(sql)
+		&SQL(FETCH RESJSON INTO :tLocalRes)
+	}
+	&SQL(CLOSE RESJSON)
+
+	quit sc
+]]></Implementation>
+</Method>
+
+<Method name="CleanJOSNData">
+<Description>
+Clean all data in FHIR JOSN structure</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>restURL,debug=0</FormalSpec>
+<Implementation><![CDATA[
+	//do ##class(TC.hmf.FHIR.Server.Utils).CleanJOSNData("/tcfhir/trakr4")
+	set strategy =$classmethod("HS.FHIRServer.API.InteractionsStrategy","GetStrategyForEndpoint",restURL)
+	set clsdatapack= strategy.GetResourceClassesPackage()
+	set clssearchpack= strategy.GetSearchClassesPackage()
+	
+	do ##class(TC.hmf.FHIR.Server.Utils).CleanupFHIRAllData(clsdatapack,debug)
+	do ##class(TC.hmf.FHIR.Server.Utils).CleanupFHIRAllData(clssearchpack,debug)
+	
+	// clear everything
+	
+	set everythingcls=clsdatapack_".Rsrc"
+	set everythingtable=..GetSQLTableName(everythingcls)
+	
+	set sql="delete from "_everythingtable_"  "
+	set rset=$system.SQL.Execute(sql)
+	
+	
+	k ^HSFHIR.X0001.V.RsrcVerD
+	k ^HSFHIR.X0001.V.RsrcVerI
+	
+	quit 1
 ]]></Implementation>
 </Method>
 
@@ -29504,8 +29575,95 @@ that will be used for EncounterNumbers and in some cases ExternalId.
 
 <Class name="TC.hmf.FHIR.Transform.API.SDA3ToFHIR">
 <Super>HS.FHIR.DTL.Util.API.Transform.SDA3ToFHIR</Super>
-<TimeChanged>66007,38964.156598</TimeChanged>
+<TimeChanged>66031,35401.0969596</TimeChanged>
 <TimeCreated>66004,60957.067712</TimeCreated>
+
+<Method name="GetId">
+<Description>
+Overrideable method that allows custom designation of a resource id. SDA source
+and the generated resource are provided.
+@API.Overrideable</Description>
+<FormalSpec>source:HS.SDA3.SuperClass,resource:%DynamicObject</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
+	// user encounter number as id for encounter 
+	if resource.resourceType = "Encounter" {
+		return source.EncounterNumber
+	}
+ 
+ 	 
+
+ 	if resource.resourceType = "Organization" {
+	 	 return $system.SQL.ALPHAUP(resource.identifier.name.value)	
+ 	}
+
+ 	
+ 	if resource.resourceType = "Practitioner" {
+		if $CLASSNAME(source)="HS.SDA3.CodeTableDetail.CareProvider"
+		{
+			 return $system.SQL.ALPHAUP(resource.identifier.name.value)	
+		}
+	}
+	if resource.resourceType = "Location" {
+		if $CLASSNAME(source)="HS.SDA3.CodeTableDetail.HealthCareFacility"
+		{
+			 return $replace(source.Code," ","")	
+		}
+	}
+	
+	
+	
+	return ""
+]]></Implementation>
+</Method>
+
+<Method name="IsDuplicate">
+<FormalSpec>resource:%DynamicObject,id:%String</FormalSpec>
+<Private>1</Private>
+<ReturnType>HS.FHIR.DTL.vR4.Model.Base.Reference</ReturnType>
+<Implementation><![CDATA[
+	
+	
+	
+	if ..%schema.IsSharedResourceType(resource.resourceType) {
+		
+	 
+		do $system.Encryption.SHA1HashResult()
+		
+	
+		if resource.resourceType = "Organization" 
+		 {
+			 do $system.Encryption.SHA1HashInput(resource.identifier.value.value)
+		}
+		elseif resource.resourceType = "Practitioner" 
+		 {
+			 do $system.Encryption.SHA1HashInput(resource.identifier.value.value)
+		}
+		elseif resource.resourceType = "Location" 
+		 {
+			do $system.Encryption.SHA1HashInput(resource.identifier.value.value)
+			
+		}
+		else
+		{
+			do $system.Encryption.SHA1HashInput(resource.%ToJSON())
+		}
+	 	
+		
+		
+		//Hash will be computed on first 32KB of resource stream
+		
+		set hash = $system.Encryption.Base64Encode($system.Encryption.SHA1HashResult())
+		
+		if $data(..%resourceIndex("hash", hash)) {
+			return ..CreateReference(resource.resourceType, ..%resourceIndex("hash", hash))
+		}
+		
+		set ..%resourceIndex("hash", hash) = id
+	}
+	return ""
+]]></Implementation>
+</Method>
 
 <Method name="HandleInvalidResource">
 <Description>
@@ -29520,6 +29678,9 @@ is to throw an exception and exit transformation.
 	}
 	// ignore extension basic issues 
 	if $find(exception.DisplayString(),"The type 'Basic' requires a property named 'code'")> 0 quit 
+	if $find(exception.DisplayString(),"Type 'Extension' is a malformed")> 0 quit 
+	
+	
 	throw exception
 ]]></Implementation>
 </Method>
@@ -29528,7 +29689,7 @@ is to throw an exception and exit transformation.
 
 <Class name="TC.hmf.FHIR.Transform.SDA3.Container">
 <Super>Ens.DataTransformDTL</Super>
-<TimeChanged>66007,38191.965297</TimeChanged>
+<TimeChanged>66030,68890.2307129</TimeChanged>
 <TimeCreated>66007,37868.816818</TimeCreated>
 <DependsOn>HS.SDA3.Container</DependsOn>
 
@@ -29549,9 +29710,85 @@ is to throw an exception and exit transformation.
 <Data><![CDATA[
 <transform sourceClass='HS.SDA3.Container' targetClass='HS.SDA3.Container' create='new' language='objectscript' >
 <assign value='source' property='target' action='set' />
+<foreach property='source.Encounters()' key='k1' >
+<subtransform class='TC.hmf.FHIR.Transform.SDA3.Encounter' targetObj='target.Encounters.(k1)' sourceObj='source.Encounters.(k1)' />
+</foreach>
 <foreach property='source.Observations()' key='k1' >
 <subtransform class='TC.hmf.FHIR.Transform.SDA3.Observation' targetObj='target.Observations.(k1)' sourceObj='source.Observations.(k1)' />
 </foreach>
+</transform>
+]]></Data>
+</XData>
+</Class>
+
+
+<Class name="TC.hmf.FHIR.Transform.SDA3.Encounter">
+<Super>Ens.DataTransformDTL</Super>
+<TimeChanged>66030,86072.4019058</TimeChanged>
+<TimeCreated>66007,28459.299186</TimeCreated>
+<DependsOn>HS.SDA3.Encounter</DependsOn>
+
+<Parameter name="IGNOREMISSINGSOURCE">
+<Default>1</Default>
+</Parameter>
+
+<Parameter name="REPORTERRORS">
+<Default>1</Default>
+</Parameter>
+
+<Parameter name="TREATEMPTYREPEATINGFIELDASNULL">
+<Default>0</Default>
+</Parameter>
+
+<Method name="GetLocationCode">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>Ward,Room,Bed</FormalSpec>
+<Implementation><![CDATA[
+	set location=Ward
+	if $g(Room)'=""
+	{
+		set location=location_"."_Room
+	}
+	if $g(Bed)'=""
+	{
+		set location=location_"."_Bed
+	}
+	quit location
+]]></Implementation>
+</Method>
+
+<Method name="GetLocationDesc">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>Ward,Room,Bed</FormalSpec>
+<Implementation><![CDATA[
+	set location="Ward "_Ward
+	if $g(Room)'=""
+	{
+		set location=location_",Room "_Room
+	}
+	if $g(Bed)'=""
+	{
+		set location=location_",Bed "_Bed
+	}
+	quit location
+]]></Implementation>
+</Method>
+
+<XData name="DTL">
+<XMLNamespace>http://www.intersystems.com/dtl</XMLNamespace>
+<Data><![CDATA[
+<transform sourceClass='HS.SDA3.Encounter' targetClass='HS.SDA3.Encounter' create='new' language='objectscript' >
+<assign value='source' property='target' action='set' />
+<assign value='source.HealthCareFacility.Organization.Code' property='target.HealthCareFacility.Code' action='set' />
+<assign value='source.HealthCareFacility.Organization.Description' property='target.HealthCareFacility.Description' action='set' />
+<if condition='##class(%Dictionary.CompiledProperty).%ExistsId("HS.SDA3.Encounter||Locations")' >
+<true>
+<assign value='..GetLocationCode(source.AssignedWard,source.AssignedRoom,source.AssignedBed)' property='target.Locations.(1).LocationDetail.Code' action='set' />
+<assign value='..GetLocationDesc(source.AssignedWard,source.AssignedRoom,source.AssignedBed)' property='target.Locations.(1).LocationDetail.Description' action='set' />
+<assign value='""' property='target.HealthCareFacility.Organization' action='set' />
+
+</true>
+</if>
 </transform>
 ]]></Data>
 </XData>
@@ -30763,7 +31000,7 @@ This Parameter is updated by Perforce</Description>
 
 
 
-<Project name="TCITK" LastModified="2021-10-12 10:41:29.307643">
+<Project name="TCITK" LastModified="2021-10-13 19:02:08.0436518">
   <Items>
     <ProjectItem name="Local.FromSDALabTestItemCode.LUT" type="LUT"></ProjectItem>
     <ProjectItem name="Local.FromSDAObservationCode.LUT" type="LUT"></ProjectItem>
@@ -30906,7 +31143,7 @@ This Parameter is updated by Perforce</Description>
 This is the base class for HealthShare UI. Used by Forms and Installer under UI.</Description>
 <IncludeCode>HS.HC,%ZHSLIB,HS.HC.UI.Home</IncludeCode>
 <Super>%ZEN.Portal.Application</Super>
-<TimeChanged>66027,26634.42575</TimeChanged>
+<TimeChanged>66031,43428.7616495</TimeChanged>
 <TimeCreated>65468,76496.395738</TimeCreated>
 
 <Parameter name="APPLICATIONNAME">
@@ -31214,10 +31451,64 @@ prepare necessary arrays for calling SMP's standard header method</Description>
 	If pShowSmallMenu {
 		Do ..%OnGetSmallMenu(pSourcePage,pManageEnsemble,.tSmallMenu)
 	}
-	Set tSC = ##class(%ZEN.Portal.Application).%DrawTitleHTML(tProduct_"^"_tProductLogo_"^"_tServerName,pTitle,.tSmallMenu,.tLocatorMenu)
+	Set tSC = ..%DrawTitleHTML(tProduct_"^"_tProductLogo_"^"_tServerName,pTitle,.tSmallMenu,.tLocatorMenu)
 	
 	Set tLink=%request.URL
 	&html<<label id="idHSLogout" style="display: none;">#(tLink)#</label>>
+	Quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="CanShowSwitch">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>PageName</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[		quit 0
+]]></Implementation>
+</Method>
+
+<Method name="DrawTitleServerHTML">
+<Description>
+This method draws the server/namespace/user/license/instance information inside the title pane.
+pProduct may contain specific server name if passed in as the third piece (for HS debug purposes).</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[pProduct:%String,pTitle:%String,&pSmallMenu,&pLocatorMenu]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	#; show which server we are connected to
+	Set tInstance = $P($ZU(86),"*",2)
+	Set tLicensedTo = $$DisplayName^%SYS.LICENSE
+	Set tUserName = $UserName
+	Set tServerName = $P(pProduct,"^",3)
+	If tServerName = "" {
+		Set tServerName = $zu(110)
+	}
+	Set msgInstance = $ZCVT($ZV,"O","HTML")
+	#; Do not display "Switch" link if CanShowSwitch is false
+	Set CanShowSwitch = ..CanShowSwitch(%request.PageName)
+	
+	&html<
+	
+	<div id="serverRow" class="portalTitleInfoBox">
+		<span class="portalTitleInfoLabel" nowrap="1">#($$$TextHTML("Server"))#</span>
+		<span class="portalTitleInfoVal" nowrap>#($ZCVT(tServerName,"O","HTML"))#&nbsp;</span>
+		
+		<span class="portalTitleInfoLabel" nowrap="1">#($$$TextHTML("Namespace"))#</span>
+		<span class="portalTitleInfoVal" nowrap>#($namespace)#&nbsp;&nbsp;>
+		If CanShowSwitch {
+			Set tSwitch = $$$TextHTML("Switch namespace")
+			Set tCode = "zenPage.switchNamespace();"
+			&html<<a class="portalServerLink" title="#(tSwitch)#" href="#" onclick="#(tCode)#return false;">#($$$TextHTML("Switch"))#</a>>
+		}
+		&html<</span>>
+		Do ..DrawUsername()
+		&html<<span class="portalTitleInfoLabel" nowrap="1">#($$$TextHTML("Licensed To"))#</span>
+		<span class="portalTitleInfoVal" nowrap>#($ZCVT(tLicensedTo,"O","HTML"))#&nbsp;</span>
+		<span class="portalTitleInfoLabel" nowrap="1" title="#(msgInstance)#">#($$$TextHTML("Instance"))#</span>
+		<span class="portalTitleInfoVal" nowrap>#($ZCVT(tInstance,"O","HTML"))#&nbsp;</span>
+		<span class="portalLostConnectivityWarn" id="lostConnectivityWarn" nowrap hidden></span>>
+	&html<</div>>  //close serverRow
+
 	Quit $$$OK
 ]]></Implementation>
 </Method>
@@ -31602,6 +31893,8 @@ Get the contents of the small menu in the title area.</Description>
 	
 	Set tDemoLink=..Link("TCITK.UI.Home.cls")
 	Set pMenu($I(tI)) = $LB($$$Text("Home"),$$$Text("Display the TrakCare Innovation Toolkit page"),"document.location='"_tDemoLink_"';")
+	
+	Set pMenu($I(tI)) = $LB($$$Text("Management Portal"),$$$Text("Display the TrakCare Innovation Toolkit page"),"window.open('"_"/csp/sys/UtilHome.csp"_"');")
 	 
 	Set tAboutLink=..Link("HS.UI.About.cls")
 	Set pMenu($I(tI)) = $LB($$$Text("About"),$$$Text("Display the About page"),"document.location='"_tAboutLink_"';")
@@ -31700,16 +31993,6 @@ Provide finder contents for the HealthShare pages. Called from %CSP.Portal.Home.
 <ReturnType>%Boolean</ReturnType>
 <ServerOnly>1</ServerOnly>
 <Implementation><![CDATA[	Quit ##class(HS.UI.BaseCSP).OnPreHTTP()
-]]></Implementation>
-</Method>
-
-<Method name="switchNamespace">
-<Description>
-Show dialog to switch namespace</Description>
-<Language>javascript</Language>
-<ReturnType>%String</ReturnType>
-<ClientMethod>1</ClientMethod>
-<Implementation><![CDATA[	zenLaunchPopupWindow(zenLink('%ZEN.Dialog.namespaceSelect.cls'),'switchNamespace','status,scrollbars,resizable=yes,width=500,height=500,location=no');
 ]]></Implementation>
 </Method>
 </Class>
@@ -32042,7 +32325,7 @@ This XML block defines the contents of the menu pane.</Description>
 Home page for the HealthShare Management Portal.</Description>
 <IncludeCode>%sySystem,HS.HC.UI.Home,%ZHSLIB</IncludeCode>
 <Super>HS.UI.Base</Super>
-<TimeChanged>66026,16598.713673</TimeChanged>
+<TimeChanged>66031,43265.1082232</TimeChanged>
 <TimeCreated>65468,76488.785131</TimeCreated>
 
 <Parameter name="FAVORITEICON">
@@ -32093,7 +32376,7 @@ URL of home page (used in links).</Description>
 <Description>
 If true, show the Namespace dropdown.</Description>
 <Type>BOOLEAN</Type>
-<Default>1</Default>
+<Default>0</Default>
 </Parameter>
 
 <Parameter name="DEFAULTVIEWMODE">
@@ -34451,16 +34734,6 @@ Add any customized menu options for a product</Description>
 		}
 	}
 	Quit tSC
-]]></Implementation>
-</Method>
-
-<Method name="switchNamespace">
-<Description>
-Show dialog to switch namespace</Description>
-<Language>javascript</Language>
-<ReturnType>%String</ReturnType>
-<ClientMethod>1</ClientMethod>
-<Implementation><![CDATA[	zenLaunchPopupWindow(zenLink('%ZEN.Dialog.namespaceSelect.cls'),'switchNamespace','status,scrollbars,resizable=yes,width=500,height=500,location=no');
 ]]></Implementation>
 </Method>
 </Class>
@@ -37050,9 +37323,9 @@ When the page is loaded, put cursor where it belongs.</Description>
 <Description>
 Common methods for HS UI.</Description>
 <Abstract>1</Abstract>
-<IncludeCode>%ZHSLIB,HS.Upgrade,HS.HC.UI.Home,HS.HC,HS.HC.Invoke</IncludeCode>
+<IncludeCode>%ZHSLIB,HS.Upgrade,HS.HC.UI.Home,HS.HC</IncludeCode>
 <Super>HS.HC.UI.Util</Super>
-<TimeChanged>66008,62401.330009</TimeChanged>
+<TimeChanged>66031,42940.411235</TimeChanged>
 <TimeCreated>65468,76498.262392</TimeCreated>
 
 <Parameter name="APPLICATION">
@@ -37117,34 +37390,6 @@ Get the contents of the small menu in the title area.</Description>
 <Implementation><![CDATA[
 	Set tQuery("Mode")="messages"
 	Quit $$$HSUILinkQuery("ClinicianPortal","HS.UI.ClinicianPortal.cls",tQuery)
-]]></Implementation>
-</Method>
-
-<Method name="GetFolderCount">
-<ClassMethod>1</ClassMethod>
-<FormalSpec>pType</FormalSpec>
-<ReturnType>%Integer</ReturnType>
-<Implementation><![CDATA[
-	Set tClinicianId=##class(HS.Registry.Person.User).SessionUserClinician()
-	Set tSC=##class(HS.Util.HubServices).InvokeHubService("HS.Push.WebServices","HS.Push.WebServicesClient","FolderDocumentCount",.tCount,tClinicianId,pType)
-	Quit $S($$$ISOK(tSC):tCount,1:$$$Text("Not Found"))
-]]></Implementation>
-</Method>
-
-<Method name="%GetSummaryTypes">
-<Description>
-Returns patient summary types (XML plus report types) in session data sorted by description</Description>
-<ClassMethod>1</ClassMethod>
-<Implementation><![CDATA[
-	If '$D(%session.Data("SummaryTypes")) {
-		$$$HCInvoke(,,"XMLSummaryType",.tSummaryType)
-		Set tDesc="" For {
-			Set tDesc=$O(tSummaryType(tDesc),1,tCode) Quit:tDesc=""
-			Set %session.Data("SummaryTypes",tDesc)=tCode
-		}
-		Set %session.Data("SummaryTypes",$$$Text("Patient Summary (HTML)"))="HTML"
-		Set %session.Data("SummaryTypes",$$$Text("Patient Summary (PDF)"))="PDF"
-	}
 ]]></Implementation>
 </Method>
 
@@ -37870,7 +38115,7 @@ When the page is loaded, put cursor where it belongs.</Description>
 
 <Class name="TCITK.Utils">
 <Super>%RegisteredObject</Super>
-<TimeChanged>66020,28506.753788</TimeChanged>
+<TimeChanged>66030,67952.7435103</TimeChanged>
 <TimeCreated>66009,15278.108697</TimeCreated>
 
 <Method name="GetEndpointFHIRVersion">
@@ -38049,6 +38294,9 @@ When the page is loaded, put cursor where it belongs.</Description>
 	for {	
 		set index=$o(result(index))
 		q:index=""
+		
+		zn index
+		
 		continue:##class(%Dictionary.CompiledClass).%ExistsId("Ens.Config.Credentials")=0
 		do ..UpdateTCCredntials(TCAPICredntialsName,tUserName,tPassword)
 	}
@@ -38096,6 +38344,8 @@ When the page is loaded, put cursor where it belongs.</Description>
 		set index=$o(result(index))
 		q:index=""
  
+ 		zn index
+ 		
 		continue:##class(%Dictionary.CompiledClass).%ExistsId("Ens.Config.Credentials")=0
 		continue:##class(%Dictionary.CompiledClass).%ExistsId("HS.Registry.Service.SOAP")=0
 		
@@ -38115,8 +38365,12 @@ When the page is loaded, put cursor where it belongs.</Description>
 <FormalSpec>name="TRAK",pUserName,pPassword</FormalSpec>
 <Implementation><![CDATA[
 	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("DSTU2")
+ 
+ 	
 	SET Credentials=##class(Ens.Config.Credentials).%OpenId(name)
 	if '$isobject(Credentials) q 1
+	
+	 
 	set Credentials.SystemName=name
 	set Credentials.Username=pUserName
 	set Credentials.Password=pPassword
