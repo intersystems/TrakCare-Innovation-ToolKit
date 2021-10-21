@@ -2,10 +2,12 @@
 
 ## Prerequisites 
 
-	1-Docker & Docker Compose (This needed if you will use Docker Option )
-	2-TrakCare T2019+ and IRIS For Health 2020.2+
-	3-Health Care Messaging Framework (HMF) installed and Running 
-	4-Good knowledge about IRIS for Health and FHIR 
+	1-Docker & Docker Compose (This needed if you will use Docker Option ) .
+	2-TrakCare T2019+ and IRIS For Health 2020.2+ .
+	3-Health Care Messaging Framework (HMF) installed and Running .
+	4-Good knowledge about IRIS for Health and FHIR .
+	
+** Innovation toolkit works with Intel CPU only . 
 	
 ## Install with Docker 
 
@@ -93,3 +95,11 @@ Login : SuperUser/password
 ## Contact US
 
 send email to eslam.farahat@intersystems.com
+
+
+## Credit 
+
+https://github.com/grongierisc/IRIS-Oauth2-Server-Client 
+Built By Guillaume Rongier guillaume.rongier@intersystems.com
+
+
