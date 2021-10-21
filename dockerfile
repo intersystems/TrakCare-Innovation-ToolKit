@@ -1,8 +1,10 @@
-FROM store/intersystems/irishealth-community:2020.2.0.204.0
+FROM store/intersystems/irishealth-community:2021.1.0.215.0
 LABEL maintainer="Eslam Farahat <eslam.farahat@intersystems.com>"
 
-#FROM store/intersystems/irishealth:2020.2.0.204.0
-#FROM store/intersystems/irishealth-community:2020.2.0.204.0
+#https://hub.docker.com/_/intersystems-iris-for-health/plans/80ae1325-d535-484e-8307-b643c2865dd8?tab=instructions
+#FROM store/intersystems/irishealth-community:2020.4.0.547.0
+#FROM store/intersystems/iris-community:2021.1.0.215.0
+
 
 # Varaibles
 ARG link

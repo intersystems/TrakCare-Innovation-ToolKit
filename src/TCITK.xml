@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="IRIS" version="26" zv="IRIS for UNIX (Ubuntu Server LTS for x86-64 Containers) 2020.2 (Build 204U)" ts="2021-10-14 09:53:48">
+<Export generator="IRIS" version="26" zv="IRIS for UNIX (Ubuntu Server LTS for x86-64 Containers) 2021.1 (Build 215U)" ts="2021-10-21 06:58:32">
 
 
 <Class name="TC.hmf.FHIR.Demo.SDA.DemoPatient">
@@ -25069,7 +25069,7 @@ are scope values and the values are the display form of the scope value.<br>
 <tr><td>Customer can modify these CSS to tailor desired look and feel.</td></tr>
 </table>]]></Description>
 <Super>%CSP.Page</Super>
-<TimeChanged>66007,22066.262513</TimeChanged>
+<TimeChanged>66038,25083.611548</TimeChanged>
 <TimeCreated>65416,39750.624357</TimeCreated>
 
 <Parameter name="DirectLoginUser">
@@ -25085,6 +25085,23 @@ are scope values and the values are the display form of the scope value.<br>
 Login page localization domain</Description>
 <Default>%OAuth2Login</Default>
 </Parameter>
+
+<Method name="DelegatedAuthentication">
+<Description><![CDATA[
+DelegatedAuthentication can be used to redirect the flow of the authorization process to another authentication system, such as an OpenID Connect 
+Identity Provider. If it is not null, the resource owner will be redirected to <var>delegatedAuthenticationURL</var>. 
+<var>localRedirectURL</var> is a URL that the delegated authentication service should 
+redirect to after completion in order to reinsert the user back into the original authorization flow. This method
+may set values of the properties.CustomProperties array that may be used in the ValidateDelegatedAuthentication method of the Validate class.]]></Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>properties:%OAuth2.Server.Properties,localRedirectURL:%String,*delegatedAuthenticationURL:%String</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	// no delegated authentication
+	Set delegatedAuthenticationURL=""
+	Quit $$$OK
+]]></Implementation>
+</Method>
 
 <Method name="GetLanguageList">
 <Description>
@@ -31001,7 +31018,7 @@ This Parameter is updated by Perforce</Description>
 
 
 
-<Project name="TCITK" LastModified="2021-10-14 09:44:29.400541">
+<Project name="TCITK" LastModified="2021-10-21 06:17:53.109156">
   <Items>
     <ProjectItem name="Local.FromSDALabTestItemCode.LUT" type="LUT"></ProjectItem>
     <ProjectItem name="Local.FromSDAObservationCode.LUT" type="LUT"></ProjectItem>
