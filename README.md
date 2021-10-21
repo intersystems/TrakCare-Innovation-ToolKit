@@ -2,11 +2,10 @@
 
 ## Prerequisites 
 
-	1-Docker
-	2-Docker Compose
-	3-TrakCare T2019+ and IRIS For Health 2020.2+
-	4-Health Care Messaging Farmwork 
-	5-good knowledge about IRIS for Health and FHIR 
+	1-Docker & Docker Compose (This needed if you will use Docker Option )
+	2-TrakCare T2019+ and IRIS For Health 2020.2+
+	3-Health Care Messaging Framework (HMF) installed and Running 
+	4-Good knowledge about IRIS for Health and FHIR 
 	
 ## Install with Docker 
 
