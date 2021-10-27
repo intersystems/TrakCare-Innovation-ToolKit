@@ -34,11 +34,11 @@ all done !!!!
 
 ## HMF Configurations
 
-you will need to have Healthcare Messaging Framework (HMF) and TrakCare API to use the toolkit , below is just dummy sample , you need to enter valid details so the toolkit can acccess trakcare and work as expected 
+you will need to have Healthcare Messaging Framework (HMF) and TrakCare API to use the toolkit  , you need to enter valid details so the toolkit can acccess trakcare and work as expected 
 
 To configure that you will need to have the URL of one of HMF web services , as example the web service used to query HMF 
 
-http:/172.27.97.15:57772/csp/healthshare/trak-hmf/services/TC.hmf.System.Service.Inbound.Query.cls 
+http://172.27.97.15:57772/csp/healthshare/trak-hmf/services/TC.hmf.System.Service.Inbound.Query.cls 
 
 Setp 1: try access same from URL from browser and make sure you can access to make sure URL is valid , the URL will ask for IRIS user name and password once added you should get html page show invalid action , if you got that it means you have valid HMF web service URL
 
@@ -89,7 +89,7 @@ To try the API demo
 https://localhost/csp/healthshare/trakitkit/TCITK.UI.TCAPITest.cls
 
 
-## SMP Access
+## System Managment Portal Access
 
 To access SMP page 
 https://localhost/csp/sys/%25CSP.Portal.Home.zen
@@ -113,7 +113,6 @@ Login : SuperUser/password
 
     6- run do ##class(TC.hmf.FHIR.Installer.FHIR).InstallDemo("C:\source\") // add DSTU2 & R4 
 
-## FAQ
 
 
 ## Share TrakCare Innovation ToolKit 
