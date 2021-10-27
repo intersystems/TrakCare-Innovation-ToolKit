@@ -3,7 +3,7 @@
 ## Prerequisites 
 
 	1-Docker & Docker Compose (This needed if you will use Docker Option ) .
-	2-TrakCare T2019+ and IRIS For Health 2020.2+ .
+	2-TrakCare T2019+  .
 	3-Health Care Messaging Framework (HMF) installed and Running .
 	4-Good knowledge about IRIS for Health and FHIR .
 	
@@ -13,24 +13,7 @@
 
 docker-compose up --build
 
-
-## Install without Docker
-
-*you will need to have IRIS for Health 2020.2+ and valid license \
-**you will need to enabled HTTPS in your server so Oauth2 and smart apps can work 
-
-    1- login in terminal 
-
-    2- run zn "hslib" 
-    
-    3- run do ##class(HS.HC.Util.Installer).InstallFoundation("TRAKITKIT") // add landing namespace 
-
-    4- run zn "TRAKITKIT"   // goto the new namespace 
-
-    5- run w $system.OBJ.ImportDir("C:\source\","*.cls;*.inc;*.mac;*.xml","cubk",.errors,1) // import teh code 
-
-    6- run do ##class(TC.hmf.FHIR.Installer.FHIR).InstallDemo("C:\source\") // add DSTU2 & R4 
-
+** check the end of the guide if you want to install without docker 
 
 ## How to Configure
 
@@ -83,18 +66,35 @@ To try the API demo
 https://localhost/csp/healthshare/trakitkit/TCITK.UI.TCAPITest.cls
 
 
-## FAQ
-
-
-## Advanced
+## SMP Access
 
 To access SMP page 
 https://localhost/csp/sys/%25CSP.Portal.Home.zen
 Login : SuperUser/password
 
+
+## Install without Docker
+
+*you will need to have IRIS for Health 2020.2+ and valid license \
+**you will need to enabled HTTPS in your server so Oauth2 and smart apps can work 
+
+    1- login in terminal 
+
+    2- run zn "hslib" 
+    
+    3- run do ##class(HS.HC.Util.Installer).InstallFoundation("TRAKITKIT") // add landing namespace 
+
+    4- run zn "TRAKITKIT"   // goto the new namespace 
+
+    5- run w $system.OBJ.ImportDir("C:\source\","*.cls;*.inc;*.mac;*.xml","cubk",.errors,1) // import teh code 
+
+    6- run do ##class(TC.hmf.FHIR.Installer.FHIR).InstallDemo("C:\source\") // add DSTU2 & R4 
+
+## FAQ
+
 ## Contact US
 
-send email to eslam.farahat@intersystems.com
+send email to eslam.farahat@intersystems.com or use https://client.intersystems.com/home 
 
 
 ## Credit 
