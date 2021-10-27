@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="IRIS" version="26" zv="IRIS for UNIX (Ubuntu Server LTS for x86-64 Containers) 2021.1 (Build 215U)" ts="2021-10-21 06:58:32">
+<Export generator="IRIS" version="26" zv="IRIS for UNIX (Ubuntu Server LTS for x86-64 Containers) 2021.1 (Build 215U)" ts="2021-10-27 15:12:41">
 
 
 <Class name="TC.hmf.FHIR.Demo.SDA.DemoPatient">
@@ -29593,7 +29593,7 @@ that will be used for EncounterNumbers and in some cases ExternalId.
 
 <Class name="TC.hmf.FHIR.Transform.API.SDA3ToFHIR">
 <Super>HS.FHIR.DTL.Util.API.Transform.SDA3ToFHIR</Super>
-<TimeChanged>66031,35401.0969596</TimeChanged>
+<TimeChanged>66044,49568.731152</TimeChanged>
 <TimeCreated>66004,60957.067712</TimeCreated>
 
 <Method name="GetId">
@@ -29707,7 +29707,7 @@ is to throw an exception and exit transformation.
 
 <Class name="TC.hmf.FHIR.Transform.SDA3.Container">
 <Super>Ens.DataTransformDTL</Super>
-<TimeChanged>66030,68890.2307129</TimeChanged>
+<TimeChanged>66044,50272.470065</TimeChanged>
 <TimeCreated>66007,37868.816818</TimeCreated>
 <DependsOn>HS.SDA3.Container</DependsOn>
 
@@ -29734,6 +29734,7 @@ is to throw an exception and exit transformation.
 <foreach property='source.Observations()' key='k1' >
 <subtransform class='TC.hmf.FHIR.Transform.SDA3.Observation' targetObj='target.Observations.(k1)' sourceObj='source.Observations.(k1)' />
 </foreach>
+<subtransform class='TC.hmf.FHIR.Transform.SDA3.Patient' targetObj='target.Patient' sourceObj='source.Patient' />
 </transform>
 ]]></Data>
 </XData>
@@ -29851,6 +29852,38 @@ is to throw an exception and exit transformation.
 </true>
 </if>
 <assign value='+source.ObservationValue' property='target.ObservationValue' action='set' />
+</transform>
+]]></Data>
+</XData>
+</Class>
+
+
+<Class name="TC.hmf.FHIR.Transform.SDA3.Patient">
+<Super>Ens.DataTransformDTL</Super>
+<TimeChanged>66044,50202.750434</TimeChanged>
+<TimeCreated>66007,28459.299186</TimeCreated>
+<DependsOn>HS.SDA3.Patient</DependsOn>
+
+<Parameter name="IGNOREMISSINGSOURCE">
+<Default>1</Default>
+</Parameter>
+
+<Parameter name="REPORTERRORS">
+<Default>1</Default>
+</Parameter>
+
+<Parameter name="TREATEMPTYREPEATINGFIELDASNULL">
+<Default>0</Default>
+</Parameter>
+
+<XData name="DTL">
+<XMLNamespace>http://www.intersystems.com/dtl</XMLNamespace>
+<Data><![CDATA[
+<transform sourceClass='HS.SDA3.Patient' targetClass='HS.SDA3.Patient' create='new' language='objectscript' >
+<assign value='source' property='target' action='set' />
+<assign value='""' property='target.Comments' action='set' >
+<annotation>clear comments </annotation>
+</assign>
 </transform>
 ]]></Data>
 </XData>
@@ -31018,7 +31051,7 @@ This Parameter is updated by Perforce</Description>
 
 
 
-<Project name="TCITK" LastModified="2021-10-21 06:17:53.109156">
+<Project name="TCITK" LastModified="2021-10-27 13:58:25.866346">
   <Items>
     <ProjectItem name="Local.FromSDALabTestItemCode.LUT" type="LUT"></ProjectItem>
     <ProjectItem name="Local.FromSDAObservationCode.LUT" type="LUT"></ProjectItem>
@@ -32343,7 +32376,7 @@ This XML block defines the contents of the menu pane.</Description>
 Home page for the HealthShare Management Portal.</Description>
 <IncludeCode>%sySystem,HS.HC.UI.Home,%ZHSLIB</IncludeCode>
 <Super>HS.UI.Base</Super>
-<TimeChanged>66031,43265.1082232</TimeChanged>
+<TimeChanged>66044,53952.222131</TimeChanged>
 <TimeCreated>65468,76488.785131</TimeCreated>
 
 <Parameter name="FAVORITEICON">
@@ -33632,6 +33665,7 @@ pArgs - subscripts used when for submenu structure within the array</Description
 	Do:tEditSyncTables ..AddOption("FHIR Test Utility","Open Demo Wizard","TCITK\FHIR Test Page","TCITK.UI.FHIRTest.cls",,,,.pData,.n1)
 	Do:tEditSyncTables ..AddOption("TrakCare API Demo","Open Demo Wizard","TCITK TCAPI\FHIR Test Page","TCITK.UI.TCAPITest.cls",,,,.pData,.n1)
 	
+ 	
 	//Do:tEditSyncTables ..AddOption("System Info","Update SMART On FHIR Details","DEMO\SOFASettings","TCITK.UI.SmartOnFHirApps.cls",,,,.pData,.n1)
 
 	
@@ -37437,7 +37471,7 @@ This is a Studio Wizard that creates or updates the Hub, Edge or Access
  components of a HealthShare system]]></Description>
 <IncludeCode>HS.HC</IncludeCode>
 <Super>HS.UI.Base</Super>
-<TimeChanged>66026,18657.500299</TimeChanged>
+<TimeChanged>66044,53780.124662</TimeChanged>
 <TimeCreated>65468,76488.834599</TimeCreated>
 
 <Parameter name="APPLICATION">
@@ -37559,8 +37593,8 @@ This page display a welcome message and asks user if they want to start configur
 </hgroup>
 <spacer height="4"/>
 <vgroup id="idContent" align="center" cellAlign="center" groupClass="linkBox">
-<button caption="Configure HMF Web Service*" enclosingClass="button" align="center" onclick="zen('mgHMFConfig').show('','','',200,300);" title="Click to configure HMF"/>
-<button caption="Configure TrakCare API Access" align="center" onclick="zen('mgTCAPIConfig').show('','','',200,300);" title="Click to configure TC API Access"/>
+<button caption="Configure HMF Web Service*" enclosingClass="button" align="center" onclick="zen('mgHMFConfig').show('','','',200,300);" title="Click to configure HMF web services will be used to read patient data from TrakCare"/>
+<button caption="Configure TrakCare API Access" align="center" onclick="zen('mgTCAPIConfig').show('','','',200,300);" title="Click to configure TrakCare API Access"/>
 <button caption="Configure Oauth2 Server Name" align="center" onclick="zen('mgNetHost').show('','','',200,300);" title="Click to change the network host name"/>
  </vgroup>
 
@@ -37746,8 +37780,10 @@ User clicked Delete</Description>
 <vgroup labelClass="lblNormal" labelPosition="left" enclosingStyle="padding:4px;">
 <label enclosingStyle="font-size:14px;color:black;font-weight:bold;padding-bottom:4px" value="TrakCare API Configuration"/>
  
-<text id="TCAPIUserName" label="TC API User Name:" size="20" labelClass="lblNormal"  />
-<password id="TCAPIUserPassword" label="TC API User Password:" size="20" labelClass="lblNormal"   />
+<text id="TCAPIUserName" label="TrakCare API User Name:" size="20" labelClass="lblNormal"  />
+<password id="TCAPIUserPassword" label="TrakCare API User Password:" size="20" labelClass="lblNormal"   />
+
+<link id="TCAPIHelp" caption="Help" href="https://github.com/intersystems/TrakCare-Innovation-ToolKit/blob/main/README.md#trakcare-api-configurations" target="_blank" />
 
 
 </vgroup>
@@ -37812,23 +37848,28 @@ User clicked Delete</Description>
 <spacer height="10px"/>
 <vgroup labelClass="lblNormal" labelPosition="left" enclosingStyle="padding:4px;">
 <label enclosingStyle="font-size:14px;color:black;font-weight:bold;padding-bottom:4px" value="HMF Configuration"/>
-<text id="HMFServer" label="HMF Server: " size="20" labelClass="lblNormal" 
+<text id="HMFServer" label="HMF IRIS Server Name: " size="20" labelClass="lblNormal" 
 	onchange="zenPage.changeHMFName();"
-	title="Enter HMF Server Name"
+	title="Enter HMF Server DNS Name or IP Address as example 172.27.97.15  "
 	/>
-<text id="HMFPort" label="HMF Port: " size="10" labelClass="lblNormal" 
+<text id="HMFPort" label="HMF IRIS Web Port: " size="10" labelClass="lblNormal" 
 	onchange="zenPage.changeHMFName();"
-	title="Enter HMF Webservice Port"
+	title="Enter HMF IRIS Web Server Port as example 57772 "
 	/>
-<text id="HMFLocation" label="HMF Location: " size="50" labelClass="lblNormal" 
+<text id="HMFLocation" label="HMF IRIS Web App: " size="50" labelClass="lblNormal" 
 	onchange="zenPage.changeHMFName();"
-	title="Enter HMF URL Location"
+	title="Enter HMF Web App Location as example /csp/healthshare/trak-hmf/services/"
 	/>	
 <checkbox id="HMFHTTPS" label="HTTPS: "  labelClass="lblNormal" 
 	title="HTTPS"
 	/>
-<text id="HMFUserName" label="HMF User Name:" size="20" labelClass="lblNormal" onchange="zenPage.changeHMFName();"/>
-<password id="HMFUserPassword" label="HMF User Password:" size="20" labelClass="lblNormal" onchange="zenPage.changeHMFName();"/>
+<text id="HMFUserName" label="IRIS User Name:" size="20" labelClass="lblNormal" onchange="zenPage.changeHMFName();"  title="IRIS User Name will be used to authenticate the request as example superuser" />
+<password id="HMFUserPassword" label="IRIS User Password:" size="20" labelClass="lblNormal" onchange="zenPage.changeHMFName();" title="IRIS User Password will be used to authenticate the request" />
+
+
+<link id="HMFHelp" caption="Help" href="https://github.com/intersystems/TrakCare-Innovation-ToolKit/blob/main/README.md#hmf-configurations" target="_blank" />
+
+
 
 
 </vgroup>
@@ -38133,7 +38174,7 @@ When the page is loaded, put cursor where it belongs.</Description>
 
 <Class name="TCITK.Utils">
 <Super>%RegisteredObject</Super>
-<TimeChanged>66030,67952.7435103</TimeChanged>
+<TimeChanged>66044,54154.108379</TimeChanged>
 <TimeCreated>66009,15278.108697</TimeCreated>
 
 <Method name="GetEndpointFHIRVersion">
@@ -38353,6 +38394,9 @@ When the page is loaded, put cursor where it belongs.</Description>
 	Set TCOutboundServiceName =$PARAMETER("TC.hmf.FHIR.Installer.FHIR","TCOutboundServiceName")
 	set TCOutboundWebServiceURL=Protocol_tServer_$select(tPort'="":":",1:"")_tPort_""_tLocation_"TC.hmf.System.Service.Inbound.SOAP.cls"
  
+ 	Set TCAPIServiceName =$PARAMETER("TC.hmf.FHIR.Installer.FHIR","TCAPIServiceName")
+	set TCAPIWebServiceURL=Protocol_tServer_$select(tPort'="":":",1:"")_tPort_""_tLocation_"TC.hmf.System.Service.Inbound.SYSAPI.cls"
+ 
 	
 	set currentNS = $Namespace
 	D ##class(%SYS.Namespace).ListAll(.result)
@@ -38370,6 +38414,7 @@ When the page is loaded, put cursor where it belongs.</Description>
 		do ..UpdateTCCredntials(IRISCredntialsName,tUserName,tPassword)
 		do ..UpdateTCEndPoint(TCQueryServiceName,IRISCredntialsName,TCQueryWebServiceURL,SSLConfig)
 		do ..UpdateTCEndPoint(TCOutboundServiceName,IRISCredntialsName,TCOutboundWebServiceURL,SSLConfig)
+		do ..UpdateTCEndPoint(TCAPIServiceName,IRISCredntialsName,TCAPIWebServiceURL,SSLConfig)
 		
 	}
 	
