@@ -7,7 +7,7 @@
 	3-Health Care Messaging Framework (HMF) installed and Running .
 	4-Good knowledge about IRIS for Health and FHIR .
 	
-** Innovation toolkit works with Intel CPU only . 
+** Innovation toolkit works with Intel CPU only  . 
 	
 ## Install with Docker 
 
@@ -54,16 +54,16 @@ all done !!!!
 you will need to have Healthcare Medssaging Framework (HMF) and TrakCare API to use the toolkit , below is just dummy sample , you need to enter valid details so the toolkit can acccess trakcare and work as expected 
 
 Sample HMF Configuration \
-	Protocol	: HTTP \
-	Server 		: 172.27.97.15 \
-	Port 		: 57772 \
-	Web App 	: /csp/healthshare/trak-hmf/services/ \
-	User 		: superuser \
-	Password	: ********	
+	Protocol			: HTTP \
+	Server Name(full server dns)	: 172.27.97.15 \
+	Port 	(IRIS SMP web port )	: 57772 \
+	Web App  (HMF Web App Location)	: /csp/healthshare/trak-hmf/services/ \
+	IRIS User Name 			: superuser \
+	IRIS User Password		: ********	
 	
-Sample API User 
-	User Name 	: isc \
-	Password	: ***** 
+Sample API User  (trakcare user got api enabled in user settings) \
+	TrakCare User Name 	: isc \
+	TrakCare User Password	: ***** 
 
 
 
