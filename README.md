@@ -43,7 +43,10 @@ Sample HMF Configuration \
 	Web App  (HMF Web App Location)	: /csp/healthshare/trak-hmf/services/ \
 	IRIS User Name 			: superuser \
 	IRIS User Password		: ********	
-	
+
+
+## TrakCareC API Configurations
+
 Sample API User  (trakcare user got api enabled in user settings) \
 	TrakCare User Name 	: isc \
 	TrakCare User Password	: ***** 
