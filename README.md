@@ -45,7 +45,7 @@ Sample HMF Configuration \
 	IRIS User Password		: ********	
 
 
-## TrakCareC API Configurations
+## TrakCare API Configurations
 
 Sample API User  (trakcare user got api enabled in user settings) \
 	TrakCare User Name 	: isc \
