@@ -116,7 +116,7 @@ Login : SuperUser/password
 ## FAQ
 
 
-## Share TrakCare Innovation ToolKit QR Code
+## Share TrakCare Innovation ToolKit 
 
 <img src="https://github.com/intersystems/TrakCare-Innovation-ToolKit/blob/main/images/repo-qr-code.png" alt="drawing" style="width:200px;height:200px"/>
 
