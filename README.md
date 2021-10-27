@@ -34,7 +34,22 @@ all done !!!!
 
 ## HMF Configurations
 
-you will need to have Healthcare Medssaging Framework (HMF) and TrakCare API to use the toolkit , below is just dummy sample , you need to enter valid details so the toolkit can acccess trakcare and work as expected 
+you will need to have Healthcare Messaging Framework (HMF) and TrakCare API to use the toolkit , below is just dummy sample , you need to enter valid details so the toolkit can acccess trakcare and work as expected 
+
+To configure that you will need to have the URL of one of HMF web services , as example the web service used to query HMF 
+
+http:/172.27.97.15:57772/csp/healthshare/trak-hmf/services/TC.hmf.System.Service.Inbound.Query.cls 
+
+Setp 1: try access same from URL from browser and make sure you can access to make sure URL is valid , the URL will ask for IRIS user name and password once added you should get html page show invalid action , if you got that it means you have valid HMF web service URL
+
+Step 2: enter same server name in the URL in server name inside HMF config page , make sure you use full DNS name include domain name , and if you have only IP address you can use , as per above URL it should be 172.27.97.15
+
+Step 3: take the web path and put in HMF IRIS web app text field , as in above example it should be /csp/healthshare/trak-hmf/services/ , make sure you have start and end forward slash 
+
+setp 4: put the port you have in the URL in the port field , in above example it's 57772
+
+setp 5: put the IRIS user name and password you used in step 1 , this a must so HMF authrize teh call and send a response 
+
 
 Sample HMF Configuration \
 	Protocol			: HTTP \
