@@ -59,10 +59,15 @@ Sample HMF Configuration \
 	IRIS User Name 			: superuser \
 	IRIS User Password		: ********	
 
+ 
+
+<img src="https://github.com/intersystems/TrakCare-Innovation-ToolKit/blob/main/images/HMFConfig.png" alt="drawing" style="width:700px;height:400px"/>
 
 ## TrakCare API Configurations
 
-Sample API User  (trakcare user got api enabled in user settings) \
+You will need API User  (trakcare user got api enabled in user settings) \
+
+Sample API Configuration \
 	TrakCare User Name 	: isc \
 	TrakCare User Password	: ***** 
 
@@ -110,12 +115,20 @@ Login : SuperUser/password
 
 ## FAQ
 
+
+## Share TrakCare Innovation ToolKit QR Code
+
+<img src="https://github.com/intersystems/TrakCare-Innovation-ToolKit/blob/main/images/repo-qr-code.png" alt="drawing" style="width:200px;height:200px"/>
+
 ## Contact US
 
 send email to eslam.farahat@intersystems.com or use https://client.intersystems.com/home 
 
 
 ## Credit 
+
+
+Innovation Toolkit project docker built on top of 
 
 https://github.com/grongierisc/IRIS-Oauth2-Server-Client 
 Built By Guillaume Rongier guillaume.rongier@intersystems.com
