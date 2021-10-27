@@ -32,7 +32,7 @@ Click on Configure TrakCare API Access , enter TrakCare API user and save
 
 all done !!!!
 
-## Sample Configurations
+## HMF Configurations
 
 you will need to have Healthcare Medssaging Framework (HMF) and TrakCare API to use the toolkit , below is just dummy sample , you need to enter valid details so the toolkit can acccess trakcare and work as expected 
 
