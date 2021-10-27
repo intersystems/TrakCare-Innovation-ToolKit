@@ -48,7 +48,7 @@ Step 3: take the web path and put in HMF IRIS web app text field , as in above e
 
 setp 4: put the port you have in the URL in the port field , in above example it's 57772
 
-setp 5: put the IRIS user name and password you used in step 1 , this a must so HMF authrize teh call and send a response 
+setp 5: put the IRIS user name and password you used in step 1 , this a must so HMF accpt the web service call and send a response 
 
 
 Sample HMF Configuration \
