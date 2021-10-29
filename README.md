@@ -15,6 +15,8 @@ docker-compose up --build
 
 ** check the end of the guide if you want to install without docker 
 
+*** the coomunity license expire 30 OCT , we are working on update to fix that and will be updated to docker by next week , you can know more from post https://community.intersystems.com/post/warning-20211-community-edition-license-expiring-soon-override-keys-available
+
 ## How to Configure
 
 Go to Innovation Toolkit Home Page\
