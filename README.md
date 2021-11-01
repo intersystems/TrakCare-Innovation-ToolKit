@@ -7,15 +7,14 @@
 	3-Health Care Messaging Framework (HMF) installed and Running .
 	4-Good knowledge about IRIS for Health and FHIR .
 	
-** Innovation toolkit works with Intel CPU only  . 
+* Innovation toolkit can be installed without docker , check the end of the guide if you want to install without docker 
 	
 ## Install with Docker 
 
 docker-compose up --build
 
-** check the end of the guide if you want to install without docker 
 
-*** the community license expire 30 OCT 2021 , this was by accident , we are working on update to fix that and will be updated to docker by next week , you can know more from post https://community.intersystems.com/post/warning-20211-community-edition-license-expiring-soon-override-keys-available
+
 
 ## How to Configure
 
