@@ -7,13 +7,14 @@
 	3-Health Care Messaging Framework (HMF) installed and Running .
 	4-Good knowledge about IRIS for Health and FHIR .
 	
-** Innovation toolkit works with Intel CPU only  . 
+* Innovation toolkit can be installed without docker , check the end of the guide if you want to install without docker 
 	
 ## Install with Docker 
 
 docker-compose up --build
 
-** check the end of the guide if you want to install without docker 
+
+
 
 ## How to Configure
 
