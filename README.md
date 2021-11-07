@@ -1,5 +1,10 @@
 # TrakCare Innovation ToolKit
 
+## Walkthrough Video
+
+https://client.intersystems.com/viewdocument/enabling-innovation
+
+
 ## Prerequisites 
 
 	1-Docker & Docker Compose (This needed if you will use Docker Option ) .
