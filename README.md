@@ -23,8 +23,15 @@ docker-compose up --build
 
 ## How to Configure
 
-Go to Innovation Toolkit Home Page\
+Go to 
+
+Innovation Toolkit HTTPS Home Page\
 https://localhost/csp/healthshare/trakitkit/TCITK.UI.Home.cls 
+
+Or
+
+Innovation Toolkit HTTP Home Page (use if you have issues with self signed certificate )\
+http://localhost:52773/csp/healthshare/trakitkit/TCITK.UI.Home.cls
 
 Login : SuperUser/password
 
