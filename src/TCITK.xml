@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="IRIS" version="26" zv="IRIS for UNIX (Ubuntu Server LTS for x86-64 Containers) 2021.1 (Build 215.3U)" ts="2022-03-07 10:11:36">
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2021.2 (Build 651U)" ts="2022-03-15 07:11:03">
 <Class name="%ZHS.HC.OAuth2.Utils">
 <TimeChanged>66167,32105.175025</TimeChanged>
 <TimeCreated>66167,32105.175025</TimeCreated>
@@ -361,39 +361,32 @@ This DTL XData block was generated. Do not modify it.</Description>
 Transforms SDA3 HS.SDA3.Vaccination to vR4 Immunization</Description>
 <ProcedureBlock>1</ProcedureBlock>
 <Super>Ens.DataTransformDTL</Super>
-<TimeChanged>66167,56047.617278</TimeChanged>
+<TimeChanged>66183,19099.166</TimeChanged>
 <TimeCreated>65556,51533.459386</TimeCreated>
 <DependsOn>HS.SDA3.Vaccination,HS.FHIR.DTL.vR4.Model.Resource.Immunization</DependsOn>
 
 <XData name="DTL">
-<Description>
-This DTL XData block was generated. Do not modify it.</Description>
 <XMLNamespace>http://www.intersystems.com/dtl</XMLNamespace>
 <Data><![CDATA[
 <transform sourceClass='HS.SDA3.Vaccination' targetClass='HS.FHIR.DTL.vR4.Model.Resource.Immunization' create='existing' language='objectscript' >
-  <assign value='"uknown"' property='target.doseQuantity.system' action='set' />
-  <assign value='"NA"' property='target.doseQuantity.code' action='set' />
-  <if condition='source.Administrations.Count()>0'> 
-	<true> 
-	<assign value='target' property='tmp' action='set' />
-	<assign value='source.Administrations.(1).LotNumber' property='target.lotNumber' action='set' />
-	</true> 
-</if> 
+<assign value='"uknown"' property='target.doseQuantity.system' action='set' />
+<assign value='"NA"' property='target.doseQuantity.code' action='set' />
+<if condition='source.Administrations.Count()&gt;0' >
+<true>
+<assign value='target' property='tmp' action='set' />
+<assign value='source.Administrations.(1).LotNumber' property='target.lotNumber' action='set' />
+</true>
+</if>
 <assign value='##class(HS.FHIR.DTL.Util.Element.TypeCast).DateToFHIR(source.EnteredOn, "dateTime")' property='value' action='set' />
-<if condition='value&apos;=""'> 
+<if condition='value&apos;=""' >
 <true>
 <assign value='value' property='target.occurrenceDateTime' action='set' >
- 
-<annotation>
-<![CDATA[ Vaccine administration date
- --- The source is optional, but the target is *Required*. When there is no source data to assign to this field, there is no default value, so the FHIR resource fails validation and is not saved. For this field, this is the desired behavior.   ]]]]><![CDATA[>
-</annotation>
+<annotation> Vaccine administration date
+ --- The source is optional, but the target is *Required*. When there is no source data to assign to this field, there is no default value, so the FHIR resource fails validation and is not saved. For this field, this is the desired behavior.   </annotation>
 </assign>
-
-
 </true>
-</if> 
-  
+</if>
+<assign value='1' property='target.primarySource' action='set' />
 </transform>
 ]]></Data>
 </XData>
@@ -27999,7 +27992,7 @@ This Parameter is updated by Perforce</Description>
 <Class name="TC.hmf.FHIR.Installer.FHIR">
 <IncludeCode>HS.HC,HS.FHIRServer</IncludeCode>
 <Super>TC.hmf.FHIR.Installer.Abstract</Super>
-<TimeChanged>66173,25902.7889555</TimeChanged>
+<TimeChanged>66183,19825.938831</TimeChanged>
 <TimeCreated>65998,36183.100722</TimeCreated>
 
 <Parameter name="IRISUserName">
@@ -28207,7 +28200,7 @@ This Parameter is updated by Perforce</Description>
 	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("R3")
 	
 	//do ##class(TC.hmf.FHIR.Installer.Oauth2).Setup()
-	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("R4","TCFHIR","/tcfhir/r4")
+	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("R4","TCFHIR","/v3/tcfhir/r4")
 	If '..CheckGetKey() {
 		Write !!,"License key not present, cannot install FHIR"
 		Quit
@@ -28781,7 +28774,7 @@ This Parameter is updated by Perforce</Description>
 		Set settings = 0
 		Set settings($I(settings)) = $lb("Host","TCQueryService",..#TCQueryServiceName)
 		Set settings($I(settings)) = $lb("Adapter","SSLCheckServerIdentity","0")
-		Set settings($I(settings)) = $lb("Host","EnabledDataSegments","Alert,Allergy,Encounter,Patient,Problem,RadOrder,LabOrder,Diagnosis,Appointment,Medication,Observation,Vaccination")
+		Set settings($I(settings)) = $lb("Host","EnabledDataSegments","Alert,Allergy,Encounter,Patient,Problem,RadOrder,LabOrder,Diagnosis,Appointment,Medication,Observation,Vaccination,Procedure")
 		set newOperation.LogTraceEvents=1
 		Do newOperation.UpdateSettings(.settings)
 		Do production.Items.Insert(newOperation)
@@ -28960,7 +28953,7 @@ utility to be called by chart to show the smart app </Description>
 
 <Class name="TC.hmf.FHIR.Installer.Oauth2">
 <Super>TC.hmf.FHIR.Installer.Abstract</Super>
-<TimeChanged>66175,31380.054744</TimeChanged>
+<TimeChanged>66183,17431.5356142</TimeChanged>
 <TimeCreated>66006,15612.530814</TimeCreated>
 
 <Parameter name="Oauth2CustomNamespace">
@@ -29017,34 +29010,24 @@ utility to be called by chart to show the smart app </Description>
 <ClassMethod>1</ClassMethod>
 <Implementation><![CDATA[
 	//do ##class(TC.hmf.FHIR.Installer.Oauth2).Setup()
- 
  	do ##class(TC.hmf.FHIR.Installer.Oauth2).GetOauth2Details(.tSSLActive,.tHost,.tPort,.tPrefix,.tEndpoint)
- 	
  	w !,"SSL Active:",tSSLActive
- 	
  	if tSSLActive'=1
  	{
 	 	w !,"ssl not active , please activate to configure the ouath2 server"
 	 	quit 1
  	}
- 	
- 
  	set tCustomNamespace=..#Oauth2CustomNamespace
  	do ..CreateCustomOauth2NS(tCustomNamespace)
-	
-	
 	// configure oauth2
 	Do ##class(TC.hmf.FHIR.Installer.FHIR).CreateSSLConfig("OAuth2.SSL")
-	Do ..CreateOauth2Server(tHost,tPort,tPrefix,tEndpoint)
-	Do ..CreateServerDefinitionForClient(tHost,tPort,tPrefix,tEndpoint)
-	Do ..CreateClient(tHost,tPort,tPrefix,tEndpoint)
-	
-	
-	
-	
-	//W ##class(TC.hmf.FHIR.SMART.Utils).OAuthClientCreateForSMART(1,"growth_chart","https://tcfhirsandbox.intersystems.com.au/smart/growth-chart/","SMART.GrowthChart","SMART.GrowthChart")
-	
-	write "create oauth2 done"
+	set tSC=..CreateOauth2Server(tHost,tPort,tPrefix,tEndpoint)
+	$$$ThrowOnError(tSC)
+	Set tSC =..CreateServerDefinitionForClient(tHost,tPort,tPrefix,tEndpoint)
+	$$$ThrowOnError(tSC)
+	Set tSC =..CreateClient(tHost,tPort,tPrefix,tEndpoint)
+	$$$ThrowOnError(tSC)	
+	write !,"create oauth2 done"
 ]]></Implementation>
 </Method>
 
@@ -29080,6 +29063,11 @@ utility to be called by chart to show the smart app </Description>
 	{
 		Set sys = ##class(OAuth2.Server.Configuration).%New()
 	}
+	
+	
+	w !,"create oauth2 server"
+	w !,"end point:",pEndpoint
+	
 	set tCustomNamespace=$zconvert(..#Oauth2CustomNamespace,"U")
  
 
@@ -29106,7 +29094,7 @@ utility to be called by chart to show the smart app </Description>
 	Set sys.AllowUnsupportedScope = 1
 	Set sys.AudRequired = 0
 	Set sys.SupportSession = 1
-	Set sys.ReturnRefreshToken = ""
+	Set sys.ReturnRefreshToken = "f"
 	Set sys.SupportedGrantTypes = "AIPCJ"
 	Set sys.CustomizationRoles = "%DB_IRISSYS,%Manager,%ALL"
 	Set sys.CustomizationNamespace = tCustomNamespace
@@ -29136,27 +29124,30 @@ utility to be called by chart to show the smart app </Description>
 <ClassMethod>1</ClassMethod>
 <FormalSpec>pHost,pPort,pPrefix,pEndpoint</FormalSpec>
 <Implementation><![CDATA[
+	//https://tcfhirsandbox.intersystems.com.au/v3/oauth2/.well-known/openid-configuration
 	set currentNS = $Namespace
 	zn "%SYS"
     	Set tSC = $$$OK
     	try
     	{
-	    	
+	    	w !,"create oauth2 server definition for client"
+	    	w !,"end point:",pEndpoint
 	    	set rowid=""
 	    	&sql(select id  into :rowid from OAuth2.ServerDefinition where IssuerEndpoint=:pEndpoint)
 	    	quit:rowid'=""  // server already exist 
-	    	
-		Set sys = ##class(OAuth2.ServerDefinition).%New()
-		Set sys.IssuerEndpoint =pEndpoint
-		Set sys.SSLConfiguration = "OAuth2.SSL"
-		Set sys.IsDiscovery = 1
-		do ##class(OAuth2.ServerDefinition).GetServerMetadata(pEndpoint,"OAuth2.SSL",.metadata)
-		Set sys.Metadata = metadata
-		Set tSC = sys.%Save()
+			Set sys = ##class(OAuth2.ServerDefinition).%New()
+			Set sys.IssuerEndpoint =pEndpoint
+			Set sys.SSLConfiguration = "OAuth2.SSL"
+			Set sys.IsDiscovery = 1
+			do ##class(OAuth2.ServerDefinition).GetServerMetadata(pEndpoint,"OAuth2.SSL",.metadata)
+			Set sys.Metadata = metadata
+			Set tSC = sys.%Save()
     	}
     	catch(exp)
     	{
-	 	w !,"Error , looks like SSL not enabled "   	
+	 		w !,"Error adding server defination for client "   
+             set tSC= $System.Status.Error(exp.Code,exp.Name)
+              
     	}
 
 	zn currentNS
@@ -29170,11 +29161,13 @@ utility to be called by chart to show the smart app </Description>
 <FormalSpec>pHost,pPort,pPrefix,pEndpoint</FormalSpec>
 <Implementation><![CDATA[
 	//do ##class(TC.hmf.FHIR.Installer.Oauth2).CreateClient()
+	w !,"create oauth2 server client"
+	Set tSC = $$$OK
 	set currentNS = $Namespace
 	zn "%SYS"
 	set rowid=""
 	&sql(select id  into :rowid from OAuth2.ServerDefinition where IssuerEndpoint=:pEndpoint)
-	 quit:rowid="" // server does not exist 
+	 quit:rowid="" tSC // server does not exist 
 
 	Set ServerDefinition = ##class(OAuth2.ServerDefinition).Open(rowid)
 	set tAppName= ..GetOauth2ClinetName(currentNS)
@@ -29186,25 +29179,60 @@ utility to be called by chart to show the smart app </Description>
 	else
 	{
 		zn currentNS
-		quit 1 // already exist 	
+		quit tSC // already exist 	
 	}
+	
+	Set WebPortStatus = ##class(%RoutineMgr).GetWebServerPort(.WebPort)
+	
 	Set sys.ApplicationName =tAppName
 	Set sys.ServerDefinition = ServerDefinition
 	Set sys.Enabled = 1
 	Set sys.ClientType = "confidential"
 	Set sys.SSLConfiguration = "OAuth2.SSL"
-	Set sys.RedirectionEndpoint.UseSSL = 1
-	Set sys.RedirectionEndpoint.Host = pHost
+	Set sys.RedirectionEndpoint.Port=WebPort
+	Set sys.RedirectionEndpoint.UseSSL = 0
+	Set sys.RedirectionEndpoint.Host = "localhost"
 	Set sys.AuthenticationType = "basic"
 	Set sys.Metadata."client_name" = tAppName
+ 
 	w sys.RegisterClient() 
 	Set tSC = sys.%Save()
 	w !,tSC
-    Set tSC = $$$OK
-	
 	zn currentNS
+	if tSC=$$$OK
+	{
+		set tSC=..UpdateRedirectURL(sys.ClientId)
+	}
+	
+	
 
     Quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="UpdateRedirectURL">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>pClientID="TCFHIR-OAuth2Client"</FormalSpec>
+<Implementation><![CDATA[
+	//w ##class(TC.hmf.FHIR.Installer.Oauth2).UpdateRedirectURL("TCFHIR-OAuth2Client")
+	Set tSC = $$$OK
+	set currentNS = $Namespace
+	zn "%SYS"
+	Set tClient = ##class(OAuth2.Server.Client).Open(pClientID,.sc)
+	if $IsObject(tClient)
+	{
+		do tClient.RedirectURL.Insert("https://redirect.health.apple.com/HealthProviderLogin/") 
+		//do tClient.RedirectURL.Insert("x-argonaut-app://HealthProviderLogin/") 
+		do tClient.RedirectURL.Insert("https://oauth.pstmn.io/v1/callback") 
+		set tSC=tClient.%Save()
+		
+	}
+	
+	
+	
+	
+	zn currentNS
+	Quit tSC
 ]]></Implementation>
 </Method>
 </Class>
@@ -30274,10 +30302,9 @@ This Parameter is updated by Perforce</Description>
 The ValidateUserClass is specified in the Authorization Server Configuration.
 It must contain a ValidateUser method which will validate a username/password combination
 and return a set of properties associated with this user.</Description>
-<ClassType>persistent</ClassType>
 <ProcedureBlock>0</ProcedureBlock>
-<Super>%Persistent</Super>
-<TimeChanged>66173,20965.6507595</TimeChanged>
+<Super>%RegisteredObject</Super>
+<TimeChanged>66183,24551.9887953</TimeChanged>
 <TimeCreated>63678,64776.432447</TimeCreated>
 
 <Index name="UserIndex">
@@ -30345,6 +30372,11 @@ This sample ValidateUser method validates the user based on the users for this i
 <FormalSpec>username:%String,password:%String,scope:%ArrayOfDataTypes,properties:%OAuth2.Server.Properties,*sc:%Status</FormalSpec>
 <ReturnType>%Boolean</ReturnType>
 <Implementation><![CDATA[
+	
+	
+	
+	$$$SysLog(3,"OAuth2Server","[OAuth2.Server.Auth:ValidateUser]","username="_username)
+	
  	set aud=properties.RequestProperties.GetAt("aud")
 	set tTargetNamespace=..GetNamespaceByAud(aud)
 	// direct login for smart apps
@@ -30353,29 +30385,41 @@ This sample ValidateUser method validates the user based on the users for this i
 	set PatientURN=""
 	if (directlogin'=1)
 	{
+		
+		$$$SysLog(3,"OAuth2Server","[OAuth2.Server.Auth:ValidateUser]","user name and password")
+		$$$SysLog(3,"OAuth2Server","[OAuth2.Server.Auth:ValidateUser]","tTargetNamespace:"_tTargetNamespace)
 		if tTargetNamespace="" Quit 0 // invalid audiance 
 		Set tCurrentNS = $Namespace
 		Set $namespace=tTargetNamespace
+		
+		
+		
+		
 		// We use local Cache user list as the shipped default.
 		set securityClass="TC.hmf.FHIR.Security.Users"
 		if '$classmethod(securityClass,"Exists",username,.user,.sc) || $$$ISERR(sc) {
 			if $$$ISERR(sc),$$$GETERRORCODE(sc)=$$$ERRORCODE($$$UserDoesNotExist) {
 				Set $namespace=tCurrentNS
 				set sc=$$$OK
+				
 			}
+			$$$SysLog(3,"OAuth2Server","[OAuth2.Server.Auth:ValidateUser]","user does not exist")
 			quit 0
 		}
 		// Check the password
 		if password'="",'$classmethod(securityClass,"CheckPassword",user,password) {
 			Set $namespace=tCurrentNS
+			$$$SysLog(3,"OAuth2Server","[OAuth2.Server.Auth:ValidateUser]","invalid password")
 			quit 0
 		}
 		set PatientURN=user.MRN
 		Set $namespace=tCurrentNS
+		$$$SysLog(3,"OAuth2Server","[OAuth2.Server.Auth:ValidateUser]","valid login")
 		
 	}
 	elseif (launchpatient'="")
 	{
+		$$$SysLog(3,"OAuth2Server","[OAuth2.Server.Auth:ValidateUser]","direct login")
 		set PatientURN=launchpatient
 	}
 	else
@@ -30403,6 +30447,9 @@ This sample ValidateUser method validates the user based on the users for this i
 	
 	//support dstu2
 	do ..SetTokenProperty(.properties,"scope","patient/*.read")
+	
+	
+	$$$SysLog(3,"OAuth2Server","[OAuth2.Server.Auth:ValidateUser]","login done")
 
 	quit 1
 ]]></Implementation>
@@ -30555,23 +30602,6 @@ TC Custom Method to create IRIS user for TC patient</Description>
 <Implementation><![CDATA["trakcare"
 ]]></Implementation>
 </Method>
-
-<Storage name="Default">
-<Type>%Storage.Persistent</Type>
-<DataLocation>^%SYS("TCFHIR","UserD")</DataLocation>
-<DefaultData>ValidateDefaultData</DefaultData>
-<IdLocation>^%SYS("TCFHIR","UserD")</IdLocation>
-<IndexLocation>^%SYS("TCFHIR","UserI")</IndexLocation>
-<StreamLocation>^%SYS("TCFHIR","UserS")</StreamLocation>
-<Data name="ValidateDefaultData">
-<Value name="1">
-<Value>%%CLASSNAME</Value>
-</Value>
-<Value name="2">
-<Value>PatientList</Value>
-</Value>
-</Data>
-</Storage>
 
 <Parameter name="SrcVer">
 <Description>
@@ -30922,7 +30952,7 @@ This Parameter is updated by Perforce</Description>
 FHIR REST Handler</Description>
 <IncludeCode>HS.FHIRServer,Ensemble</IncludeCode>
 <Super>HS.FHIRServer.RestHandler,TC.hmf.FHIR.REST.Abstract</Super>
-<TimeChanged>66175,36685.529165</TimeChanged>
+<TimeChanged>66182,2874.235992</TimeChanged>
 <TimeCreated>65468,76524.400479</TimeCreated>
 
 <XData name="UrlMap">
@@ -30967,7 +30997,7 @@ dispatched to each of the handler-methods in this class.</Description>
              	 	"type": "token"
             	})    
 	    	}
-	    	elseif ((value.type="MedicationDispense")||(value.type="MedicationRequest"))
+	    	elseif ((value.type="MedicationDispense")||(value.type="MedicationRequest")||(value.type="Coverage"))
 	    	{
 		    	do tResource.%Remove(key)
 	    	}
@@ -31186,6 +31216,8 @@ Marshall the incoming FHIR REST request into a message ready for dispatch to the
 	// Set pRequest.RequestPath ="/"_$Extract(%request.URL, $Length(%request.Application)+1,*)
 	set pRequest.QueryString = %request.GetCgiEnv("QUERY_STRING","")
 	
+	 // eslam change beneficiary to patient
+	 //set pRequest.QueryString=$replace(pRequest.QueryString,"beneficiary=","patient=")
 	
 	
 	//eslamr4 fix the issues with subject comes without patient
@@ -31975,7 +32007,7 @@ This Parameter is updated by Perforce</Description>
 
 <Class name="TC.hmf.FHIR.Security.Users">
 <Super>%Persistent</Super>
-<TimeChanged>66173,18913.3580874</TimeChanged>
+<TimeChanged>66183,25572.8918936</TimeChanged>
 <TimeCreated>66162,41568.2738476</TimeCreated>
 
 <Index name="UserIDIndex">
@@ -32077,10 +32109,11 @@ User UserPasswordSalt (used for verification)</Description>
 
 <Method name="Exists">
 <ClassMethod>1</ClassMethod>
-<FormalSpec><![CDATA[Username:%String,&User:TC.hmf.FHIR.Security.Users,&Status:%Status,Flag:%Integer=0]]></FormalSpec>
+<FormalSpec><![CDATA[UserID:%String,&User:TC.hmf.FHIR.Security.Users,&Status:%Status,Flag:%Integer=0]]></FormalSpec>
 <ReturnType>%Boolean</ReturnType>
 <Implementation><![CDATA[
-	set User=##class(TC.hmf.FHIR.Security.Users).%OpenId(Username)
+	set UserID=$zconvert(UserID,"l")
+	set User=##class(TC.hmf.FHIR.Security.Users).%OpenId(UserID)
 	if User'=""
 	{
 		set Status=$$$OK
@@ -32156,6 +32189,7 @@ Where no algorithm is passed, encrypts string using old method (pre-T2016)</Desc
 <Implementation><![CDATA[
 	//w ##class(TC.hmf.FHIR.Security.Users).AddUser("demo","demo","demo","eslam.farahat@intersystems.com","DEMO","")
 	//w ##class(TC.hmf.FHIR.Security.Users).AddUser("superuser","superuser","SYS","eslam.farahat@intersystems.com","RN000000020","")
+	set UserID=$zconvert(UserID,"l")
 	set user=##class(TC.hmf.FHIR.Security.Users).%New()
 	set user.UserID=UserID
 	set user.UserName=UserName
@@ -32501,7 +32535,7 @@ This Parameter is updated by Perforce</Description>
 <Class name="TC.hmf.FHIR.Server.Process.FHIRRouter">
 <IncludeCode>HS.HC</IncludeCode>
 <Super>Ens.BusinessProcess,HS.FHIR.FromSDA.DTL.Base</Super>
-<TimeChanged>66173,23096.0902901</TimeChanged>
+<TimeChanged>66183,18969.5566584</TimeChanged>
 <TimeCreated>65420,51234.627704</TimeCreated>
 
 <Parameter name="SETTINGS">
@@ -32512,7 +32546,7 @@ This Parameter is updated by Perforce</Description>
 <Description>
 clean patient clinical data on refresh </Description>
 <Type>%Boolean</Type>
-<InitialExpression>1</InitialExpression>
+<InitialExpression>0</InitialExpression>
 </Property>
 
 <Property name="ResourceSchemaRoot">
@@ -32834,6 +32868,7 @@ to be derived from the FHIRVersion setting on this business host.</Description>
 		set id=$piece(pFHIRRequest.Request.RequestPath,"/",2)
 		set appname=pFHIRRequest.Request.SessionApplication
 		set querystring=pFHIRRequest.Request.QueryString
+		do ..parseQueryString(querystring,.qryData)
 		if ((type="Patient")&&(querystring'="")&&($length(pFHIRRequest.Request.RequestPath,"/")=1))
 		{ 
 			$$$TRACE("search mode") 
@@ -32846,7 +32881,7 @@ to be derived from the FHIRVersion setting on this business host.</Description>
 				do ..ReplyToFHIR(Error,Status,.pResponse)
  				return $$$OK
 			}
-			 set querystring=querystring_"&_lastUpdated=ge"_searchDateTime // make sure results updated based on tc search 
+			 //set querystring=querystring_"&_lastUpdated=ge"_searchDateTime // make sure results updated based on tc search 
 			 set pFHIRRequest.Request.QueryString=querystring	
 		}
 		elseif type="Patient",id'=""
@@ -32860,6 +32895,18 @@ to be derived from the FHIRVersion setting on this business host.</Description>
  				return $$$OK
 			}
 			
+		}
+		elseif($g(qryData("patient"))'="")
+		{
+			set id=qryData("patient")
+			set tSC=..RefreshPatientRepository(id)
+			if $$$ISERR(tSC)
+			{
+				set Error=$System.Status.GetErrorText(tSC)
+				set Status="Error"
+				do ..ReplyToFHIR(Error,Status,.pResponse)
+ 				return $$$OK
+			}
 		}
 		
 		
@@ -32998,7 +33045,7 @@ to be derived from the FHIRVersion setting on this business host.</Description>
 			 set searchDateTime=$ZDT($H,3,7)
 			  $$$TRACE(querystring) 
  			do ..PatientSearch(querystring)
-			do pFHIRRequest.SetParameter("_lastUpdated","ge"_searchDateTime)
+			//do pFHIRRequest.SetParameter("_lastUpdated","ge"_searchDateTime)
 		}
 		
 		
@@ -36579,7 +36626,7 @@ This Parameter is updated by Perforce</Description>
 
 
 
-<Project name="TCITK" LastModified="2022-03-07 09:41:44.817118">
+<Project name="TCITK" LastModified="2022-03-15 05:18:20.1237447">
   <Items>
     <ProjectItem name="%ZHS.HC.OAuth2.Utils" type="CLS"></ProjectItem>
     <ProjectItem name="HS.Local.FHIR.DTL" type="PKG"></ProjectItem>
