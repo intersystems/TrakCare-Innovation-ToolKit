@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2021.2 (Build 651U)" ts="2022-03-15 07:11:03">
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2021.1 (Build 215U)" ts="2022-04-08 17:45:27">
 <Class name="%ZHS.HC.OAuth2.Utils">
 <TimeChanged>66167,32105.175025</TimeChanged>
 <TimeCreated>66167,32105.175025</TimeCreated>
@@ -27992,7 +27992,7 @@ This Parameter is updated by Perforce</Description>
 <Class name="TC.hmf.FHIR.Installer.FHIR">
 <IncludeCode>HS.HC,HS.FHIRServer</IncludeCode>
 <Super>TC.hmf.FHIR.Installer.Abstract</Super>
-<TimeChanged>66183,19825.938831</TimeChanged>
+<TimeChanged>66207,62064.696807</TimeChanged>
 <TimeCreated>65998,36183.100722</TimeCreated>
 
 <Parameter name="IRISUserName">
@@ -28200,7 +28200,7 @@ This Parameter is updated by Perforce</Description>
 	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("R3")
 	
 	//do ##class(TC.hmf.FHIR.Installer.Oauth2).Setup()
-	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("R4","TCFHIR","/v3/tcfhir/r4")
+	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("R4","TCFHIR","/tcfhir/r4")
 	If '..CheckGetKey() {
 		Write !!,"License key not present, cannot install FHIR"
 		Quit
@@ -28267,7 +28267,11 @@ This Parameter is updated by Perforce</Description>
 	do ..UpdateTCAPIEndPoint()
 	do ..UpdateTCOutboundEndPoint()
 	
-	do ..UpdateOauth2IssueEndPoint()
+	if (##class(TC.hmf.FHIR.Installer.Oauth2).ISOauth2ClientExist(pOauth2Client))
+	{
+		do ..UpdateOauth2IssueEndPoint()	
+	}
+	
 	
 	Set $namespace = tCurrentNS
 	
@@ -28328,7 +28332,10 @@ This Parameter is updated by Perforce</Description>
 		w !,"update production"
 		Set $namespace = tNamespace
 		
-		do ..UpdateCSPAppOAuthClient(tOauth2App,pOauth2Client)
+		if (##class(TC.hmf.FHIR.Installer.Oauth2).ISOauth2ClientExist(pOauth2Client))
+		{
+			do ..UpdateCSPAppOAuthClient(tOauth2App,pOauth2Client)
+		}
 		
 		do ##class(Ens.Director).UpdateProduction(10,1)
 		Set $namespace = tCurrentNS
@@ -28390,7 +28397,11 @@ This Parameter is updated by Perforce</Description>
 		w !,"start production"
 		do ..StartActiveProduction(tNamespace)
 		w !,"update endpoint oauth2 client"
-	  	do ..UpdateFHIRInstnaceOauthClient(appKey,pOauth2Client)
+		if (##class(TC.hmf.FHIR.Installer.Oauth2).ISOauth2ClientExist(pOauth2Client))
+		{
+			do ..UpdateFHIRInstnaceOauthClient(appKey,pOauth2Client)
+		}
+	  	
 	  	//w !,"update endpoint resource"
 	  	//do ..UpdateInstnaceResource(appKey,fhirResource)
 		w !,"Done"
@@ -28774,7 +28785,7 @@ This Parameter is updated by Perforce</Description>
 		Set settings = 0
 		Set settings($I(settings)) = $lb("Host","TCQueryService",..#TCQueryServiceName)
 		Set settings($I(settings)) = $lb("Adapter","SSLCheckServerIdentity","0")
-		Set settings($I(settings)) = $lb("Host","EnabledDataSegments","Alert,Allergy,Encounter,Patient,Problem,RadOrder,LabOrder,Diagnosis,Appointment,Medication,Observation,Vaccination,Procedure")
+		Set settings($I(settings)) = $lb("Host","EnabledDataSegments","Alert,Allergy,Encounter,Patient,Problem,RadOrder,LabOrder,Diagnosis,Appointment,Medication,Observation,Vaccination")
 		set newOperation.LogTraceEvents=1
 		Do newOperation.UpdateSettings(.settings)
 		Do production.Items.Insert(newOperation)
@@ -28953,7 +28964,7 @@ utility to be called by chart to show the smart app </Description>
 
 <Class name="TC.hmf.FHIR.Installer.Oauth2">
 <Super>TC.hmf.FHIR.Installer.Abstract</Super>
-<TimeChanged>66183,17431.5356142</TimeChanged>
+<TimeChanged>66207,63831.169367</TimeChanged>
 <TimeCreated>66006,15612.530814</TimeCreated>
 
 <Parameter name="Oauth2CustomNamespace">
@@ -29167,7 +29178,11 @@ utility to be called by chart to show the smart app </Description>
 	zn "%SYS"
 	set rowid=""
 	&sql(select id  into :rowid from OAuth2.ServerDefinition where IssuerEndpoint=:pEndpoint)
-	 quit:rowid="" tSC // server does not exist 
+	if rowid=""
+	{
+		zn currentNS
+		quit 0 
+	}  
 
 	Set ServerDefinition = ##class(OAuth2.ServerDefinition).Open(rowid)
 	set tAppName= ..GetOauth2ClinetName(currentNS)
@@ -29233,6 +29248,25 @@ utility to be called by chart to show the smart app </Description>
 	
 	zn currentNS
 	Quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="ISOauth2ClientExist">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>pClientName</FormalSpec>
+<Implementation><![CDATA[
+	set currentNS = $Namespace
+	zn "%SYS"
+	Set sys = ##class(OAuth2.Client).Open(pClientName,.sc)
+	zn currentNS
+	if '$IsObject(sys)
+	{
+		quit 0   
+	}
+	else
+	{
+		quit 1  	
+	}
 ]]></Implementation>
 </Method>
 </Class>
@@ -32535,7 +32569,7 @@ This Parameter is updated by Perforce</Description>
 <Class name="TC.hmf.FHIR.Server.Process.FHIRRouter">
 <IncludeCode>HS.HC</IncludeCode>
 <Super>Ens.BusinessProcess,HS.FHIR.FromSDA.DTL.Base</Super>
-<TimeChanged>66183,18969.5566584</TimeChanged>
+<TimeChanged>66207,63664.137</TimeChanged>
 <TimeCreated>65420,51234.627704</TimeCreated>
 
 <Parameter name="SETTINGS">
@@ -33706,7 +33740,7 @@ This Parameter is updated by Perforce</Description>
 <Class name="TC.hmf.FHIR.Server.Process.SDAToFHIR">
 <IncludeCode>HS.HC</IncludeCode>
 <Super>Ens.BusinessProcess,HS.FHIR.FromSDA.DTL.Base</Super>
-<TimeChanged>66160,65661.039</TimeChanged>
+<TimeChanged>66207,63664.137</TimeChanged>
 <TimeCreated>65420,51234.627704</TimeCreated>
 
 <Parameter name="SETTINGS">
@@ -36626,7 +36660,7 @@ This Parameter is updated by Perforce</Description>
 
 
 
-<Project name="TCITK" LastModified="2022-03-15 05:18:20.1237447">
+<Project name="TCITK" LastModified="2022-04-08 17:41:05.509867">
   <Items>
     <ProjectItem name="%ZHS.HC.OAuth2.Utils" type="CLS"></ProjectItem>
     <ProjectItem name="HS.Local.FHIR.DTL" type="PKG"></ProjectItem>
