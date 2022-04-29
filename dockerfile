@@ -1,4 +1,5 @@
 FROM store/intersystems/irishealth-community:2021.1.0.215.3
+#FROM store/intersystems/irishealth-community:2021.2.0.649.0
 LABEL maintainer="Eslam Farahat <eslam.farahat@intersystems.com>"
 
 #https://hub.docker.com/_/intersystems-iris-for-health/plans/80ae1325-d535-484e-8307-b643c2865dd8?tab=instructions
@@ -10,6 +11,7 @@ LABEL maintainer="Eslam Farahat <eslam.farahat@intersystems.com>"
 ARG link
 ARG port
 ENV _HTTPD_DIR /etc/apache2
+ENV DEBIAN_FRONTEND=noninteractive
 
 USER root
 

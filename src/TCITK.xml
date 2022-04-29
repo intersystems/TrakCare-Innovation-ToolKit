@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2021.1 (Build 215U)" ts="2022-04-08 17:45:27">
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2021.2 (Build 649U)" ts="2022-04-29 10:26:39">
 <Class name="%ZHS.HC.OAuth2.Utils">
 <TimeChanged>66167,32105.175025</TimeChanged>
 <TimeCreated>66167,32105.175025</TimeCreated>
@@ -24357,7 +24357,7 @@ Transforms vR4 Observation to SDA3 HS.SDA3.Observation</Description>
 
 <Class name="TC.hmf.FHIR.Demo.SDA.DemoPatient1">
 <Super>%RegisteredObject</Super>
-<TimeChanged>66167,43919.796852</TimeChanged>
+<TimeChanged>66217,51367.4527713</TimeChanged>
 <TimeCreated>66006,57020.558034</TimeCreated>
 
 <XData name="DemoSDA">
@@ -26415,8 +26415,8 @@ Transforms vR4 Observation to SDA3 HS.SDA3.Observation</Description>
 <Vaccinations>
 <Vaccination>
 <OrderItem>
-<Code>135</Code>
-<Description>Influenza, high dose seasonal</Description>
+<Code>207</Code>
+<Description>Moderna Vaccine</Description>
 <SDACodingStandard>CVX</SDACodingStandard>
 </OrderItem>
 <OrderCategory>
@@ -26425,7 +26425,7 @@ Transforms vR4 Observation to SDA3 HS.SDA3.Observation</Description>
 </OrderCategory>
 <Status>E</Status>
 <TextInstruction>Dose 1</TextInstruction>
-<Comments>Reddish discoloration</Comments>
+<Comments></Comments>
 <EnteredBy>
 <Code>Adam Gooseff</Code>
 <Description>Adam Gooseff</Description>
@@ -26455,8 +26455,8 @@ Transforms vR4 Observation to SDA3 HS.SDA3.Observation</Description>
 </Vaccination>
 <Vaccination>
 <OrderItem>
-<Code>PH1196F1P2</Code>
-<Description>HAVRIX MONODOSE, vaccine,1440 units/ml,1ml syringe(non-fixed needle) [10 X 1ml syringe(non-fixed needle)]</Description>
+<Code>207</Code>
+<Description>Moderna Vaccine</Description>
 <SDACodingStandard>CVX</SDACodingStandard>
 </OrderItem>
 <OrderCategory>
@@ -26490,8 +26490,8 @@ Transforms vR4 Observation to SDA3 HS.SDA3.Observation</Description>
 </Vaccination>
 <Vaccination>
 <OrderItem>
-<Code>AMPP11614C128,3468,22</Code>
-<Description>influenza vaccine - influenza vaccine 15micrograms vaccine</Description>
+<Code>208</Code>
+<Description>Pfizer-Biontech Vaccine</Description>
 <SDACodingStandard>CVX</SDACodingStandard>
 </OrderItem>
 <OrderCategory>
@@ -26499,7 +26499,7 @@ Transforms vR4 Observation to SDA3 HS.SDA3.Observation</Description>
 <Description>Vaccine</Description>
 </OrderCategory>
 <Status>E</Status>
-<TextInstruction>Dose 2</TextInstruction>
+<TextInstruction>Dose 1</TextInstruction>
 <EnteredAt>
 <Code>GRXX</Code>
 <Description>GRXX</Description>
@@ -27992,7 +27992,7 @@ This Parameter is updated by Perforce</Description>
 <Class name="TC.hmf.FHIR.Installer.FHIR">
 <IncludeCode>HS.HC,HS.FHIRServer</IncludeCode>
 <Super>TC.hmf.FHIR.Installer.Abstract</Super>
-<TimeChanged>66207,62064.696807</TimeChanged>
+<TimeChanged>66227,34998.3368827</TimeChanged>
 <TimeCreated>65998,36183.100722</TimeCreated>
 
 <Parameter name="IRISUserName">
@@ -28170,10 +28170,10 @@ This Parameter is updated by Perforce</Description>
 <Implementation><![CDATA[
 	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIRDemo("C:\TrakCare-Innovation-ToolKit\src\")
 
-	do ..InstallFHIR("DSTU2","")
+	do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("DSTU2","")
 	//do ..InstallFHIR("STU3","")
 	//do ..InstallFHIR("R3","")
-	do ..InstallFHIR("R4","")
+	do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("R4","")
 	
 	q 1
 ]]></Implementation>
@@ -28200,7 +28200,7 @@ This Parameter is updated by Perforce</Description>
 	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("R3")
 	
 	//do ##class(TC.hmf.FHIR.Installer.Oauth2).Setup()
-	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("R4","TCFHIR","/tcfhir/r4")
+	//do ##class(TC.hmf.FHIR.Installer.FHIR).InstallFHIR("R4","TCFHIR2","/tcfhir/r4")
 	If '..CheckGetKey() {
 		Write !!,"License key not present, cannot install FHIR"
 		Quit
@@ -28710,6 +28710,7 @@ This Parameter is updated by Perforce</Description>
 	set TCQueryOperationName="TCQuery.Operation"
 	set TCOutboundOperationName="TCOutbound.Operation"
 	set FHIRToSDAProcessName="FHIRToSDA.Process"_"."_pFHIRVersion
+	set TCSmartCardProcessName="SmartCard.Process"
 	
  
 	if ('##class(Ens.Config.Production).OpenItemByConfigName(TCRouterProcessName)){
@@ -28767,6 +28768,7 @@ This Parameter is updated by Perforce</Description>
 		Set settings($I(settings)) = $lb("Host","TCRouterConfigName",TCRouterProcessName)
 		Set settings($I(settings)) = $lb("Host","FHIRToSDAConfigName",FHIRToSDAProcessName)
 		Set settings($I(settings)) = $lb("Host","SDAToFHIRConfigName",SDAToFHIRProcessName)
+		Set settings($I(settings)) = $lb("Host","SmartCardConfigName",TCSmartCardProcessName)
 		Set settings($I(settings)) = $lb("Host","SessionApplication",appKey)
 		Set settings($I(settings)) = $lb("Host","FHIRVersion",pFHIRVersion)
 		Set settings($I(settings)) = $lb("Host","DataRefreshInterval",300)
@@ -28804,6 +28806,22 @@ This Parameter is updated by Perforce</Description>
 		Do newOperation.UpdateSettings(.settings)
 		Do production.Items.Insert(newOperation)
 	}
+	
+	if (' ##class(Ens.Config.Production).OpenItemByConfigName(TCSmartCardProcessName)){
+		// Create new tc business process
+		Set newOperation = ##class(Ens.Config.Item).%New()
+		Set newOperation.Name = TCSmartCardProcessName
+		Set newOperation.ClassName = "TC.hmf.FHIR.Server.Process.SmartCard"
+		Set settings = 0
+		Set settings($I(settings)) = $lb("Host","TCQueryConfigName",TCQueryOperationName)
+		Set settings($I(settings)) = $lb("Host","EnabledDataSegments","Encounter,Patient,Vaccination")
+		Set settings($I(settings)) = $lb("Host","SDAToFHIRConfigName",SDAToFHIRProcessName)
+		set newOperation.LogTraceEvents=1
+		Do newOperation.UpdateSettings(.settings)
+		Do production.Items.Insert(newOperation)
+	}
+	
+	
 	
 	set TRAKRouterService="FHIRRouter.Service"
 	if ('##class(Ens.Config.Production).OpenItemByConfigName(TRAKRouterService)){
@@ -28860,6 +28878,39 @@ This Parameter is updated by Perforce</Description>
 		Do production.Items.Insert(newOperation)
 	}
 	
+	set TCToFHIRProcess="TCToFHIR.Process"
+	if (' ##class(Ens.Config.Production).OpenItemByConfigName(TCToFHIRProcess)){
+		Set newOperation = ##class(Ens.Config.Item).%New()
+		Set newOperation.Name = TCToFHIRProcess
+		Set newOperation.ClassName = "TC.hmf.FHIR.Server.Process.TCToFHIR"
+		Set settings = 0
+		Set settings($I(settings)) = $lb("Host","SDAToFHIRConfigName",SDAToFHIRProcessName)
+		Set settings($I(settings)) = $lb("Host","SessionApplication",appKey)
+		Set settings($I(settings)) = $lb("Host","FHIRVersion",pFHIRVersion)
+		Set settings($I(settings)) = $lb("Host","FHIRRepoConfigName",InteropOperationName)
+		set newOperation.LogTraceEvents=1
+		Do newOperation.UpdateSettings(.settings)
+		Do production.Items.Insert(newOperation)
+	}
+ 
+	
+	set TCInboundService="TCInbound.SDA3"
+	if ('##class(Ens.Config.Production).OpenItemByConfigName(TCInboundService)){
+		// Create new sda business process
+		Set newOperation = ##class(Ens.Config.Item).%New()
+		Set newOperation.Name = TCInboundService
+		Set newOperation.ClassName = "TC.hmf.FHIR.Server.Service.TCInboundSDA3"
+		Set settings = 0
+		Set settings($I(settings)) = $lb("Host","TCInboundConfigName",TCToFHIRProcess)
+		Set settings($I(settings)) = $lb("Adapter","EnableStandardRequests",1)
+		set newOperation.LogTraceEvents=1
+		Do newOperation.UpdateSettings(.settings)
+		Do production.Items.Insert(newOperation)
+	}
+	
+	
+	
+	
 	quit $$$OK
 ]]></Implementation>
 </Method>
@@ -28882,7 +28933,6 @@ utility to be called by chart to show the smart app </Description>
 <ReturnType>%String</ReturnType>
 <Implementation><![CDATA[
 	//w ##class(TC.hmf.FHIR.Installer.FHIR).GetSMARTURL("https://localhost/tcfhir/tcdstu2/oauth2","https://tcfhirsandbox.intersystems.com.au/smart/growth-chart/launch.html","launch patient/*.*","OAuth2Client","0072900","SMART.growth_chart")
-	 
 	set result=""
 	set tMPIID=""
 	set tMPIID=pURN
@@ -28964,7 +29014,7 @@ utility to be called by chart to show the smart app </Description>
 
 <Class name="TC.hmf.FHIR.Installer.Oauth2">
 <Super>TC.hmf.FHIR.Installer.Abstract</Super>
-<TimeChanged>66207,63831.169367</TimeChanged>
+<TimeChanged>66217,35934.7887309</TimeChanged>
 <TimeCreated>66006,15612.530814</TimeCreated>
 
 <Parameter name="Oauth2CustomNamespace">
@@ -29033,11 +29083,11 @@ utility to be called by chart to show the smart app </Description>
 	// configure oauth2
 	Do ##class(TC.hmf.FHIR.Installer.FHIR).CreateSSLConfig("OAuth2.SSL")
 	set tSC=..CreateOauth2Server(tHost,tPort,tPrefix,tEndpoint)
-	$$$ThrowOnError(tSC)
+	$$$QuitOnError(tSC)
 	Set tSC =..CreateServerDefinitionForClient(tHost,tPort,tPrefix,tEndpoint)
-	$$$ThrowOnError(tSC)
+	$$$QuitOnError(tSC)
 	Set tSC =..CreateClient(tHost,tPort,tPrefix,tEndpoint)
-	$$$ThrowOnError(tSC)	
+	$$$QuitOnError(tSC)	
 	write !,"create oauth2 done"
 ]]></Implementation>
 </Method>
@@ -29372,6 +29422,130 @@ A file name to attach to the email</Description>
 This Parameter is updated by Perforce</Description>
 <Default>$Id: //trak/main/DEV/cls/TC/hmf/FHIR/Message/EmailRequest.xml#3 $</Default>
 </Parameter>
+</Class>
+
+
+<Class name="TC.hmf.FHIR.Message.SHCData">
+<Super>Ens.Response,%JSON.Adaptor</Super>
+<TimeChanged>66218,33800.7815697</TimeChanged>
+<TimeCreated>66217,59330.2736764</TimeCreated>
+
+<Property name="JSON">
+<Type>%String</Type>
+<Parameter name="MAXLEN"/>
+</Property>
+
+<Property name="QRData">
+<Type>%String</Type>
+<Parameter name="MAXLEN"/>
+</Property>
+
+<Property name="QRDataURI">
+<Type>%String</Type>
+<Parameter name="MAXLEN"/>
+</Property>
+
+<Property name="SourceID">
+<Type>%String</Type>
+<Parameter name="MAXLEN"/>
+</Property>
+
+<Property name="SourceType">
+<Type>%String</Type>
+<Parameter name="MAXLEN"/>
+</Property>
+
+<Property name="SourceDesc">
+<Type>%String</Type>
+<Parameter name="MAXLEN"/>
+</Property>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DefaultData>SHCDataDefaultData</DefaultData>
+<Data name="SHCDataDefaultData">
+<Subscript>"SHCData"</Subscript>
+<Value name="1">
+<Value>PayLoad</Value>
+</Value>
+<Value name="2">
+<Value>Token</Value>
+</Value>
+<Value name="3">
+<Value>JWS</Value>
+</Value>
+<Value name="4">
+<Value>QRData</Value>
+</Value>
+<Value name="5">
+<Value>QRDataURI</Value>
+</Value>
+<Value name="6">
+<Value>SourceID</Value>
+</Value>
+<Value name="7">
+<Value>SourceType</Value>
+</Value>
+<Value name="8">
+<Value>SourceDesc</Value>
+</Value>
+<Value name="9">
+<Value>JSON</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="TC.hmf.FHIR.Message.SHCRequest">
+<Copyright>/* Copyright (c) 2019 by InterSystems Corporation.
+   Cambridge, Massachusetts, U.S.A.  All rights reserved.
+   Confidential property of InterSystems Corporation. */</Copyright>
+<Super>Ens.Request</Super>
+<TimeChanged>66217,37891.3715097</TimeChanged>
+<TimeCreated>66161,56405.0018799</TimeCreated>
+
+<Property name="MRN">
+<Type>%String</Type>
+</Property>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DefaultData>SHCRequestDefaultData</DefaultData>
+<Data name="SHCRequestDefaultData">
+<Subscript>"SHCRequest"</Subscript>
+<Value name="1">
+<Value>MRN</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="TC.hmf.FHIR.Message.SHCResponse">
+<Copyright>/* Copyright (c) 2019 by InterSystems Corporation.
+   Cambridge, Massachusetts, U.S.A.  All rights reserved.
+   Confidential property of InterSystems Corporation. */</Copyright>
+<Super>Ens.Response,%JSON.Adaptor</Super>
+<TimeChanged>66218,33648.2675588</TimeChanged>
+<TimeCreated>66161,56405.0018799</TimeCreated>
+
+<Property name="Cards">
+<Type>TC.hmf.FHIR.Message.SHCData</Type>
+<Collection>list</Collection>
+<Parameter name="XMLPROJECTION" value="wrapped"/>
+</Property>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DefaultData>SHCResponseDefaultData</DefaultData>
+<Data name="SHCResponseDefaultData">
+<Subscript>"SHCResponse"</Subscript>
+<Value name="1">
+<Value>Cards</Value>
+</Value>
+</Data>
+</Storage>
 </Class>
 
 
@@ -32569,16 +32743,23 @@ This Parameter is updated by Perforce</Description>
 <Class name="TC.hmf.FHIR.Server.Process.FHIRRouter">
 <IncludeCode>HS.HC</IncludeCode>
 <Super>Ens.BusinessProcess,HS.FHIR.FromSDA.DTL.Base</Super>
-<TimeChanged>66207,63664.137</TimeChanged>
+<TimeChanged>66228,35529.7312885</TimeChanged>
 <TimeCreated>65420,51234.627704</TimeCreated>
 
 <Parameter name="SETTINGS">
-<Default><![CDATA[CleanupPatData:Basic,SessionApplication:Basic,SDAToFHIRConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},FHIRToSDAConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},FHIRRepoConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},TCRouterConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},FHIRVersion:Basic,DataRefreshInterval:Basic,ResourceSchemaRoot:Basic,TransmissionMode:Basic]]></Default>
+<Default><![CDATA[DisableTCQuery:Basic,SmartCardConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},CleanupPatData:Basic,SessionApplication:Basic,SDAToFHIRConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},FHIRToSDAConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},FHIRRepoConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},TCRouterConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},FHIRVersion:Basic,DataRefreshInterval:Basic,ResourceSchemaRoot:Basic,TransmissionMode:Basic]]></Default>
 </Parameter>
 
 <Property name="CleanupPatData">
 <Description>
 clean patient clinical data on refresh </Description>
+<Type>%Boolean</Type>
+<InitialExpression>0</InitialExpression>
+</Property>
+
+<Property name="DisableTCQuery">
+<Description>
+disable calling TC Query to refresh patient data </Description>
 <Type>%Boolean</Type>
 <InitialExpression>0</InitialExpression>
 </Property>
@@ -32704,6 +32885,10 @@ to be derived from the FHIRVersion setting on this business host.</Description>
 
 <Property name="SessionApplication">
 <Type>%String</Type>
+</Property>
+
+<Property name="SmartCardConfigName">
+<Type>Ens.DataType.ConfigName</Type>
 </Property>
 
 <Method name="OnRequest">
@@ -32898,63 +33083,92 @@ to be derived from the FHIRVersion setting on this business host.</Description>
 			set tSC = $$$ERROR($$$GeneralError, "Message not processed - FHIRRepoConfigName setting not defined on business host")
 			quit
 		}
+		
 		set type=$piece(pFHIRRequest.Request.RequestPath,"/",1)
 		set id=$piece(pFHIRRequest.Request.RequestPath,"/",2)
-		set appname=pFHIRRequest.Request.SessionApplication
-		set querystring=pFHIRRequest.Request.QueryString
-		do ..parseQueryString(querystring,.qryData)
-		if ((type="Patient")&&(querystring'="")&&($length(pFHIRRequest.Request.RequestPath,"/")=1))
-		{ 
-			$$$TRACE("search mode") 
-			 set searchDateTime=$ZDT($H,3,7)
- 			set tSC= ..PatientSearch(querystring)
- 			if $$$ISERR(tSC)
-			{
-				set Error=$System.Status.GetErrorText(tSC)
-				set Status="Error"
-				do ..ReplyToFHIR(Error,Status,.pResponse)
- 				return $$$OK
-			}
-			 //set querystring=querystring_"&_lastUpdated=ge"_searchDateTime // make sure results updated based on tc search 
-			 set pFHIRRequest.Request.QueryString=querystring	
-		}
-		elseif type="Patient",id'=""
-		{	
-			set tSC=..RefreshPatientRepository(id)
-			if $$$ISERR(tSC)
-			{
-				set Error=$System.Status.GetErrorText(tSC)
-				set Status="Error"
-				do ..ReplyToFHIR(Error,Status,.pResponse)
- 				return $$$OK
-			}
-			
-		}
-		elseif($g(qryData("patient"))'="")
+		set resource=$piece(pFHIRRequest.Request.RequestPath,"/",3)
+		
+		if (..DisableTCQuery=0)
 		{
-			set id=qryData("patient")
-			set tSC=..RefreshPatientRepository(id)
-			if $$$ISERR(tSC)
+			
+			set appname=pFHIRRequest.Request.SessionApplication
+			set querystring=pFHIRRequest.Request.QueryString
+			do ..parseQueryString(querystring,.qryData)
+			if ((type="Patient")&&(querystring'="")&&($length(pFHIRRequest.Request.RequestPath,"/")=1))
+			{ 
+				$$$TRACE("search mode") 
+				 set searchDateTime=$ZDT($H,3,7)
+	 			set tSC= ..PatientSearch(querystring)
+	 			if $$$ISERR(tSC)
+				{
+					set Error=$System.Status.GetErrorText(tSC)
+					set Status="Error"
+					do ..ReplyToFHIR(Error,Status,.pResponse)
+	 				return $$$OK
+				}
+				 //set querystring=querystring_"&_lastUpdated=ge"_searchDateTime // make sure results updated based on tc search 
+				 set pFHIRRequest.Request.QueryString=querystring	
+			}
+			elseif type="Patient",id'=""
+			{	
+				set tSC=..RefreshPatientRepository(id)
+				if $$$ISERR(tSC)
+				{
+					set Error=$System.Status.GetErrorText(tSC)
+					set Status="Error"
+					do ..ReplyToFHIR(Error,Status,.pResponse)
+	 				return $$$OK
+				}
+				
+			}
+			elseif($g(qryData("patient"))'="")
 			{
-				set Error=$System.Status.GetErrorText(tSC)
-				set Status="Error"
-				do ..ReplyToFHIR(Error,Status,.pResponse)
- 				return $$$OK
+				set id=qryData("patient")
+				set tSC=..RefreshPatientRepository(id)
+				if $$$ISERR(tSC)
+				{
+					set Error=$System.Status.GetErrorText(tSC)
+					set Status="Error"
+					do ..ReplyToFHIR(Error,Status,.pResponse)
+	 				return $$$OK
+				}
 			}
 		}
 		
-		
-		/// Now we have the repository updated with latest data  we can process query request
-		set tSC = ..SendRequestSync(..FHIRRepoConfigName, pFHIRRequest, .pFHIRResponse)
-		#; If tSC is an error then let HS.FHIR.Service catch it and create an OperationOutcome from it.
-		if $$$ISERR(tSC) quit
-		
-		
-		
-		
-		
-		
-		
+		if (type="SmartCard")
+		{
+			
+			set pSmartCardRequest=##class(TC.hmf.FHIR.Message.SHCRequest).%New()
+			set pSmartCardResponse=##class(TC.hmf.FHIR.Message.SHCResponse).%New()
+			set pSmartCardRequest.MRN=id
+			set tSC = ..SendRequestSync(..SmartCardConfigName, pSmartCardRequest, .pSmartCardResponse)
+			#; If tSC is an error then let HS.FHIR.Service catch it and create an OperationOutcome from it.
+			if $$$ISERR(tSC) quit
+			set pFHIRResponse=##class(HS.FHIRServer.Interop.Response).%New()
+			Set tQuickStream = ##class(HS.SDA3.QuickStream).%New()
+			if pFHIRRequest.Request.ResponseFormatCode="XML"
+			{
+				do pSmartCardResponse.XMLExportToString(.result)
+				do tQuickStream.Write(result)
+				set pFHIRResponse.QuickStreamId=tQuickStream.%Id()
+				set pFHIRResponse.ContentType="application/xml+fhir"
+			}
+			else
+			{
+				do pSmartCardResponse.%JSONExportToString(.result)
+				do tQuickStream.Write(result)
+				set pFHIRResponse.QuickStreamId=tQuickStream.%Id()
+				set pFHIRResponse.ContentType="application/json+fhir"
+			}	
+		}
+		else
+		{	
+			/// Now we have the repository updated with latest data  we can process query request
+			set tSC = ..SendRequestSync(..FHIRRepoConfigName, pFHIRRequest, .pFHIRResponse)
+			#; If tSC is an error then let HS.FHIR.Service catch it and create an OperationOutcome from it.
+			if $$$ISERR(tSC) quit	
+		}
+	
 	} catch ex {
 		set tSC = ex.AsStatus()
 	}
@@ -33528,6 +33742,12 @@ This Parameter is updated by Perforce</Description>
 </Value>
 <Value name="18">
 <Value>SDAToFHIRConfigName</Value>
+</Value>
+<Value name="19">
+<Value>SmartCardConfigName</Value>
+</Value>
+<Value name="20">
+<Value>DisableTCQuery</Value>
 </Value>
 </Data>
 </Storage>
@@ -34131,6 +34351,291 @@ This Parameter is updated by Perforce</Description>
 </Class>
 
 
+<Class name="TC.hmf.FHIR.Server.Process.SmartCard">
+<IncludeCode>HS.HC</IncludeCode>
+<Super>Ens.BusinessProcess</Super>
+<TimeChanged>66218,51674.6597225</TimeChanged>
+<TimeCreated>65420,51234.627704</TimeCreated>
+
+<Parameter name="SETTINGS">
+<Default><![CDATA[TCQueryConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},SDAToFHIRConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},FHIRVersion:Basic,EnabledDataSegments:Basic:selector?multiSelect=1&context={TC.hmf.FHIR.Utils/GetSDA3SegmentList}]]></Default>
+</Parameter>
+
+<Property name="TCQueryConfigName">
+<Description>
+Business host to which to call TrakCare query</Description>
+<Type>Ens.DataType.ConfigName</Type>
+<InitialExpression>"TC.hmf.FHIR.Server.Operation"</InitialExpression>
+</Property>
+
+<Property name="SDAToFHIRConfigName">
+<Description>
+Business host to which transform FHIR To SDA</Description>
+<Type>Ens.DataType.ConfigName</Type>
+</Property>
+
+<Property name="FHIRVersion">
+<Type>%String</Type>
+<InitialExpression>"R4"</InitialExpression>
+<Parameter name="DISPLAYLIST" value=",DSTU2,STU3,R3,R4"/>
+<Parameter name="VALUELIST" value=",DSTU2,STU3,R3,R4"/>
+</Property>
+
+<Property name="EnabledDataSegments">
+<Type>Ens.DataType.ConfigName</Type>
+<InitialExpression>"Encounter,Patient,Vaccination"</InitialExpression>
+<Parameter name="MAXLEN" value="1024"/>
+</Property>
+
+<Method name="OnRequest">
+<FormalSpec>pRequest:TC.hmf.FHIR.Message.SHCRequest,*pResponse:TC.hmf.FHIR.Message.SHCResponse</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	 
+	set tSC = $$$OK
+	try {
+		set tSC=$$$OK
+		$$$TRACE("start trak process")	
+		set tMRN=pRequest.MRN
+		set pResponse=##class(TC.hmf.FHIR.Message.SHCResponse).%New()
+		
+		set tQueryRequest=##class(HS.Message.ECRQueryRequest).%New()
+		set tQueryResponse=##class(HS.Message.ECRQueryResponse).%New()
+		set tQueryRequest.MRN=tMRN
+		do tQueryRequest.AdditionalInfo.SetAt(..EnabledDataSegments,"EnabledSegmentData")
+		set tSC=..SendRequestSync(..TCQueryConfigName,tQueryRequest,.tQryResponse)
+		if $$$ISERR(tSC) return tSC
+		
+		
+		// loop to supported objects 
+		
+		set tSDAContainer = ##class(HS.SDA3.Container).%New()
+		set tSDAContainer=##class(TC.hmf.FHIR.Utils).SDAStreamToObject(tQryResponse.ContentStream)
+		
+		set tSC=..CleanSDA(.tSDAContainer)
+		if $$$ISERR(tSC) return tSC
+		
+		FOR index=1:1:tSDAContainer.Vaccinations.Count() {
+			set tConatiner=##class(HS.SDA3.Container).%New()
+			set tConatiner.Patient=tSDAContainer.Patient
+			do tConatiner.Vaccinations.Insert( tSDAContainer.Vaccinations.GetAt(index))
+			set tCard=##class(TC.hmf.FHIR.Message.SHCData).%New()
+			set tCard.SourceID=tSDAContainer.Vaccinations.GetAt(index).ExternalId
+			set tCard.SourceType="Vaccination"
+			set tCard.SourceDesc=tSDAContainer.Vaccinations.GetAt(index).OrderItem.Description
+			set tSC=tConatiner.ToQuickXMLStream(.tStream)
+			if $$$ISERR(tSC) return tSC
+			set tMRN="0"
+			set tSC=..SDAToFHIRBundle(tMRN,tStream,.pFHIRResponse)
+			if $$$ISERR(tSC) return tSC
+			set tSC= ..FHIRToSmartBundle(2,pFHIRResponse.Payload,.tSmartCardJSON)
+			if $$$ISERR(tSC) return tSC
+			set pCardJOSN=tSmartCardJSON.%ToJSON()
+			set tsc=##class(TC.hmf.FHIR.SmartCard.Utils).GetSmartCardJWS(pCardJOSN,1,.pToken,.pJWS,.pJWSCardData,.pQRData,500,.pQRDataURI)
+			if $$$ISERR(tSC) return tSC
+			set tCard.JSON=pCardJOSN
+			set tCard.QRData=pQRData
+			set tCard.QRDataURI=pQRDataURI
+			 do pResponse.Cards.Insert(tCard)		
+  		} 
+		
+		FOR index=1:1:tSDAContainer.LabOrders.Count() {
+			if tSDAContainer.LabOrders.GetAt(index).Result.ResultItems.Count()>0
+			{
+				set tConatiner=##class(HS.SDA3.Container).%New()
+				set tConatiner.Patient=tSDAContainer.Patient
+				set tSDAContainer.LabOrders.GetAt(index).EncounterNumber=""
+				do tConatiner.LabOrders.Insert( tSDAContainer.LabOrders.GetAt(index))
+				set tCard=##class(TC.hmf.FHIR.Message.SHCData).%New()
+				set tCard.SourceID=tSDAContainer.LabOrders.GetAt(index).ExternalId
+				set tCard.SourceType="LabOrder"
+				set tCard.SourceDesc=tSDAContainer.LabOrders.GetAt(index).OrderItem.Description
+				set tSC=tConatiner.ToQuickXMLStream(.tStream)
+				if $$$ISERR(tSC) return tSC
+				set tMRN="0"
+				set tSC=..SDAToFHIRBundle(tMRN,tStream,.pFHIRResponse)
+				if $$$ISERR(tSC) return tSC
+				set tSC= ..FHIRToSmartBundle(1,pFHIRResponse.Payload,.tSmartCardJSON)
+				if $$$ISERR(tSC) return tSC
+				set pCardJOSN=tSmartCardJSON.%ToJSON()
+				set tsc=##class(TC.hmf.FHIR.SmartCard.Utils).GetSmartCardJWS(pCardJOSN,1,.pToken,.pJWS,.pJWSCardData,.pQRData,500,.pQRDataURI)
+				if $$$ISERR(tSC) return tSC
+				set tCard.JSON=pCardJOSN
+				set tCard.QRData=pQRData
+				set tCard.QRDataURI=$g(pQRDataURI)
+				do pResponse.Cards.Insert(tCard)
+			}		
+  		} 
+		
+		do pResponse.XMLExportToString(.string)
+		$$$TRACE(string)
+		
+		 
+		$$$TRACE("done trak process")
+		
+	
+	} catch ex {
+		set tSC = ex.AsStatus()
+	}
+	
+	quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="CleanSDA">
+<FormalSpec><![CDATA[&pContainer:HS.SDA3.Container]]></FormalSpec>
+<Implementation><![CDATA[
+	set tSC = $$$OK	
+	
+	set pContainer.Patient.EnteredAt=""
+	set pContainer.Patient.EnteredBy=""
+	set pContainer.Patient.EnteredOn=""
+	set pContainer.Patient.EthnicGroup=""
+	set pContainer.Patient.IsDead=""
+	set pContainer.Patient.Gender=""
+	set pContainer.Patient.CustomPairs=""
+	
+	
+	set pContainer.Patient.ExternalId=0
+	set tIndex=0
+	
+	#dim tMRN as HS.SDA3.PatientNumber
+	FOR index=1:1:pContainer.Patient.PatientNumbers.Count() {
+		set pContainer.Patient.PatientNumbers.GetAt(index).Organization=""
+		set pContainer.Patient.PatientNumbers.GetAt(index).ISOAssigningAuthority=""
+		if (pContainer.Patient.PatientNumbers.GetAt(index).NumberType="MRN")
+		{
+			set pContainer.Patient.PatientNumbers.GetAt(index).Number=0
+			set tMRN=pContainer.Patient.PatientNumbers.GetAt(index)
+		}
+	}
+	do pContainer.Patient.PatientNumbers.Clear()
+	do pContainer.Patient.PatientNumbers.Insert(tMRN)
+	
+	FOR index=1:1:pContainer.Vaccinations.Count() {
+		set tIndex=tIndex+1
+		set pContainer.Vaccinations.GetAt(index).EnteredAt=""
+		set pContainer.Vaccinations.GetAt(index).EnteredBy=""
+		set pContainer.Vaccinations.GetAt(index).Administrations=""
+		set pContainer.Vaccinations.GetAt(index).ExternalId=tIndex
+	}
+	
+ 	FOR index=1:1:pContainer.LabOrders.Count() {
+		set tIndex=tIndex+1
+		set pContainer.LabOrders.GetAt(index).EnteredAt=""
+		set pContainer.LabOrders.GetAt(index).EnteredBy=""
+		set pContainer.LabOrders.GetAt(index).ExternalId=tIndex
+		set pContainer.LabOrders.GetAt(index).OrderedBy=""
+		set pContainer.LabOrders.GetAt(index).EnteringOrganization=""
+		set pContainer.LabOrders.GetAt(index).OrderCategory=""
+		set pContainer.LabOrders.GetAt(index).ReceivingLocation=""
+	}
+	
+	quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="FHIRToSmartBundle">
+<FormalSpec><![CDATA[pType:%String,pPayLoad:%Stream.GlobalCharacter,&pSmartCardJSON:%DynamicObject]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set tSC = $$$OK
+	set pSmartCardJSON=##class(TC.hmf.FHIR.SmartCard.Utils).GetSmartJsonObject(pType)
+	set tString=""
+	do pPayLoad.Rewind()
+	While (pPayLoad.AtEnd = 0) {
+        	Set len = 1024
+        	set tString=tString_pPayLoad.Read(.len)
+    }
+    
+    
+    set tString=$replace(tString,"Patient/","resource:")
+    set tString=$replace(tString,"Immunization/","resource:")
+	set tEntryBundle=##class(%Library.DynamicObject).%FromJSON(tString) 
+	set tEntryJSON=tEntryBundle."entry"
+	set iter = tEntryJSON.%GetIterator()
+    while iter.%GetNext(.key, .tEntryRecord, .type ) {
+    
+    	// clean request details 
+        do tEntryRecord.%Remove("request")
+	    do tEntryRecord.resource.%Remove("identifier")
+	    do tEntryRecord.resource.%Remove("id")
+	    do tEntryRecord.resource.%Remove("note")
+	    do tEntryRecord.resource.%Remove("route")
+	    do tEntryRecord.resource.%Remove("doseQuantity")
+	    do tEntryRecord.resource.%Remove("primarySource")
+	    if (tEntryRecord.resource.resourceType="Patient")
+	    {
+		    if (tEntryRecord.resource.name)
+	    	{
+		    	do tEntryRecord.resource.name.%Get(0).%Remove("text")
+		    	do tEntryRecord.resource.name.%Get(0).%Remove("use")
+	    	}
+	    }
+	    elseif tEntryRecord.resource.resourceType="Immunization"
+	    {
+		    do tEntryRecord.resource.patient.%Remove("display")
+		    if (tEntryRecord.resource.vaccineCode.coding)
+	    	{
+		    	do tEntryRecord.resource.vaccineCode.coding.%Get(0).%Remove("display")
+	    	}
+	    }
+	    
+        
+    }
+	
+	$$$TRACE(tEntryJSON.%ToJSON())
+	do pSmartCardJSON.vc.credentialSubject.fhirBundle.%Set("entry",tEntryJSON)
+	$$$TRACE(pSmartCardJSON.%ToJSON())
+	quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="SDAToFHIRBundle">
+<FormalSpec>pMRN,ContentStream,*pResponse:HS.Message.FHIR.Response</FormalSpec>
+<Implementation><![CDATA[
+	set pSDARequest=##class(HS.Message.XMLMessage).%New()
+	do pSDARequest.AdditionalInfo.SetAt(pMRN,"MRN")
+	do pSDARequest.AdditionalInfo.SetAt(..FHIRVersion,"FHIRVersion")
+	set pSDARequest.ContentStream=ContentStream
+	 set tSC=..SendRequestSync(..SDAToFHIRConfigName,pSDARequest,.pResponse)
+	if $$$ISERR(tSC) return tSC
+	quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="OnInit">
+<FormalSpec>pRequest:%Library.Persistent,*pResponse:%Library.Persistent</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set sc=##super()
+ 
+	quit sc
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DefaultData>SmartCardDefaultData</DefaultData>
+<Data name="SmartCardDefaultData">
+<Subscript>"SmartCard"</Subscript>
+<Value name="1">
+<Value>TCQueryConfigName</Value>
+</Value>
+<Value name="2">
+<Value>SDAToFHIRConfigName</Value>
+</Value>
+<Value name="3">
+<Value>FHIRVersion</Value>
+</Value>
+<Value name="4">
+<Value>EnabledDataSegments</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
 <Class name="TC.hmf.FHIR.Server.Process.TCRouter">
 <IncludeCode>HS.HC</IncludeCode>
 <Super>Ens.BusinessProcess</Super>
@@ -34261,6 +34766,369 @@ Method SendSDAToFHIRRepo(pMRN, ContentStream)
 </Class>
 
 
+<Class name="TC.hmf.FHIR.Server.Process.TCToFHIR">
+<IncludeCode>HS.HC</IncludeCode>
+<Super>Ens.BusinessProcess</Super>
+<TimeChanged>66226,65825.3045775</TimeChanged>
+<TimeCreated>65420,51234.627704</TimeCreated>
+
+<Parameter name="SETTINGS">
+<Default><![CDATA[SessionApplication:Basic,SDAToFHIRConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},FHIRRepoConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},FHIRVersion:Basic,EnabledDataSegments:Basic:selector?multiSelect=1&context={TC.hmf.FHIR.Utils/GetSDA3SegmentList}]]></Default>
+</Parameter>
+
+<Property name="FHIRRepoConfigName">
+<Description>
+Business host to which to forward the FHIR request message.</Description>
+<Type>Ens.DataType.ConfigName</Type>
+</Property>
+
+<Property name="SDAToFHIRConfigName">
+<Description>
+Business host to which transform FHIR To SDA</Description>
+<Type>Ens.DataType.ConfigName</Type>
+</Property>
+
+<Property name="SessionApplication">
+<Type>%String</Type>
+</Property>
+
+<Property name="FHIRVersion">
+<Type>%String</Type>
+<InitialExpression>"DSTU2"</InitialExpression>
+<Parameter name="DISPLAYLIST" value=",DSTU2,STU3,R3,R4"/>
+<Parameter name="VALUELIST" value=",DSTU2,STU3,R3,R4"/>
+</Property>
+
+<Property name="FHIRFormat">
+<Description>
+The FHIR format to use for FHIR request message payload.</Description>
+<Type>%String</Type>
+<InitialExpression>"application/fhir+json"</InitialExpression>
+<Parameter name="DISPLAYLIST" value=",JSON,XML"/>
+<Parameter name="VALUELIST" value=",application/fhir+json,application/fhir+xml"/>
+</Property>
+
+<Property name="FormatFHIROutput">
+<Description>
+If checked, causes any created FHIR payload to include indent and line end
+formatting characters to enhance the readability of the raw content.</Description>
+<Type>%Boolean</Type>
+<InitialExpression>0</InitialExpression>
+</Property>
+
+<Property name="OutputToQuickStream">
+<Description>
+If this setting is checked, the FHIR output will be placed in an
+HS.SDA3.QuickStream, and the QuickStreamId property of the request message
+will be set to the id of that QuickStream.</Description>
+<Type>%Boolean</Type>
+<InitialExpression>0</InitialExpression>
+</Property>
+
+<Property name="FullTransactionResponse">
+<Type>%Boolean</Type>
+<InitialExpression>0</InitialExpression>
+</Property>
+
+<Property name="EnabledDataSegments">
+<Description><![CDATA[
+Supported SDA segments to be used for data retrieval from TrakCare.<br>
+This data is used to populate FHIR respository for the FHIR response.<br>
+If none selected then all supported segments will be retrieved.]]></Description>
+<Type>Ens.DataType.ConfigName</Type>
+<InitialExpression>"Alert,Allergy,Encounter,Patient,Problem,RadOrder,LabOrder,Diagnosis,Appointment,Medication,Observation,Vaccination"</InitialExpression>
+<Parameter name="MAXLEN" value="1024"/>
+</Property>
+
+<Method name="OnRequest">
+<FormalSpec>pRequest:HS.Message.XMLMessage,*pResponse:Ens.Response</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set tSC = $$$OK
+	set tSC=$$$OK
+	$$$TRACE("start trak process")	
+	set tMRN=""
+	set tSDAContainer = ##class(HS.SDA3.Container).%New()
+	set tSDAContainer=##class(TC.hmf.FHIR.Utils).SDAStreamToObject(pRequest.ContentStream)
+	for i=1:1:tSDAContainer.Patient.PatientNumbers.Count()
+	{
+		if tSDAContainer.Patient.PatientNumbers.GetAt(i).NumberType="MRN"
+		{
+			set tMRN=tSDAContainer.Patient.PatientNumbers.GetAt(i).Number
+			$$$TRACE("MRN: "_tMRN)				 
+		}					
+	}
+	set tContainer=##class(HS.SDA3.Container).%New()
+	set tEnabledSegment=..EnabledDataSegments
+	if (tEnabledSegment="")
+	{
+		set tEnabledSegment="Alert,Allergy,Encounter,Patient,Problem,RadOrder,LabOrder,Diagnosis,Appointment,Medication,Observation,Vaccination"	
+	}
+	set tContainer.Patient=tSDAContainer.Patient
+	if (tEnabledSegment'="")
+	{
+		if (..EnabledDataSegments [ "Encounter")
+		{
+			set tContainer.Encounters=tSDAContainer.Encounters
+		}
+		if (..EnabledDataSegments [ "Alert")
+		{
+			set tContainer.Alerts=tSDAContainer.Alerts
+		}
+		if (..EnabledDataSegments [ "Allergy")
+		{
+			set tContainer.Allergies=tSDAContainer.Allergies
+		}
+		if (..EnabledDataSegments [ "Problem")
+		{
+			set tContainer.Problems=tSDAContainer.Problems
+		}
+		if (..EnabledDataSegments [ "RadOrder")
+		{
+			set tContainer.RadOrders=tSDAContainer.RadOrders
+		}
+		if (..EnabledDataSegments [ "LabOrder")
+		{
+			set tContainer.LabOrders=tSDAContainer.LabOrders
+		}
+		if (..EnabledDataSegments [ "Diagnosis")
+		{
+			set tContainer.Diagnoses=tSDAContainer.Diagnoses
+		}
+		if (..EnabledDataSegments [ "Appointment")
+		{
+			set tContainer.Appointments=tSDAContainer.Appointments
+		}
+		if (..EnabledDataSegments [ "Medication")
+		{
+			set tContainer.Medications=tSDAContainer.Medications
+		}
+		if (..EnabledDataSegments [ "Observation")
+		{
+			set tContainer.Observations=tSDAContainer.Observations
+		}
+		if (..EnabledDataSegments [ "Vaccination")
+		{
+			set tContainer.Vaccinations=tSDAContainer.Vaccinations
+		}	
+	}
+ 
+	set pStream=##class(TC.hmf.FHIR.Utils).SDAObjectToStream(tContainer)
+	set tSC=..SDAToFHIRBundle(tMRN,pStream,.pFHIRResponse)
+	if $$$ISERR(tSC) return tSC
+	#dim pFHIRResponse as HS.Message.FHIR.Response
+	 set tSC=..InsertPatientFHIRBundle(tMRN,pFHIRResponse.Payload,.pResponse)
+	quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="SDAToFHIRBundle">
+<FormalSpec>pMRN,ContentStream,*pResponse:HS.Message.FHIR.Response</FormalSpec>
+<Implementation><![CDATA[
+	set pSDARequest=##class(HS.Message.XMLMessage).%New()
+	do pSDARequest.AdditionalInfo.SetAt(pMRN,"MRN")
+	do pSDARequest.AdditionalInfo.SetAt(..FHIRVersion,"FHIRVersion")
+	set pSDARequest.ContentStream=ContentStream
+	 set tSC=..SendRequestSync(..SDAToFHIRConfigName,pSDARequest,.pResponse)
+	if $$$ISERR(tSC) return tSC
+	quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="InsertPatientFHIRBundle">
+<FormalSpec>pMRN,pBundleStream,*pFHIRResponse</FormalSpec>
+<Implementation><![CDATA[
+	set tSC=$$$OK
+	if ..FHIRVersion="DSTU2"
+	{
+		set tSC=..InsertPatientFHIRDSTU2(pMRN,"transaction",pBundleStream,.pFHIRResponse)
+	}
+	elseif ..FHIRVersion="STU3"
+	{
+		set tSC=..InsertPatientFHIRSTU3(pMRN,"transaction",pBundleStream,.pFHIRResponse)
+	}
+ 	elseif ((..FHIRVersion="R4")||(..FHIRVersion="R3"))
+	{
+		set tSC=..InsertPatientFHIRJSON(pMRN,"PUT",.pBundleStream,.pFHIRResponse)
+	}
+	quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="InsertPatientFHIRDSTU2">
+<FormalSpec>pMRN,Interaction="transaction",pBundleStream,*tFHIRResponse</FormalSpec>
+<Implementation><![CDATA[
+		set tSC = ##class(%RoutineMgr).GetWebServerPort(.tPort)
+		if $$$ISERR(tSC) set tSC = $$$ERROR($$$GeneralError, "Could not get web server port") quit
+		set tHost = $zconvert($$$HSNetworkHostName, "L")
+		set tLocalHostAndPort = tHost_$select(tPort'="":":",1:"")_tPort
+		set FHIRVersion="DSTU2"
+		set tBundleType = "transaction"
+		set tMessageContentType = ..FHIRFormat
+		set tMethodContentType = $select(..FHIRFormat["json":"json",1:"xml")
+		set tFHIRRequest = ##class(HS.Message.FHIR.Request).%New()
+		set tFHIRRequest.Interaction = Interaction
+		set tFHIRRequest.Type = "Bundle"
+		set tFHIRRequest.ContentType = tMessageContentType
+		set tFHIRRequest.FHIRVersion = FHIRVersion
+		set tFHIRRequest.FormatFHIROutput = ..FormatFHIROutput
+		set tFHIRRequest.SessionApplication =..SessionApplication
+		set tFHIRRequest.SessionId = ""
+		set tFHIRRequest.Id = pMRN
+		// Set the HOST header to provide for the case where the transaction is
+		// being routed within this production (e.g., to HS.FHIR.Server.Process).
+		do tFHIRRequest.Headers.SetAt(tLocalHostAndPort,"HOST")
+		do tFHIRRequest.Payload.CopyFrom(pBundleStream)
+		// *** Optional full transaction response
+		//do tFHIRRequest.Headers.SetAt("return=representation","PREFER")
+		
+		#; Set the HOST header to provide for the case where the transaction is
+		#; being routed within this production (e.g., to HS.FHIR.Server.Process).
+		do tFHIRRequest.Headers.SetAt(tLocalHostAndPort,"HOST")
+		set tFHIRRequest.FormatFHIROutput = ..FormatFHIROutput
+		set tFHIRRequest.SessionApplication = ..SessionApplication
+		set tFHIRRequest.SessionId = ""
+		do tFHIRRequest.AdditionalInfo.SetAt(1,"ConvertUUIDs")
+		// Add Patient data to FHIR repository
+		set tSC = ..SendRequestSync(..FHIRRepoConfigName, tFHIRRequest, .tFHIRResponse)
+		if $$$ISERR(tSC) quit
+		 	if (..OutputToQuickStream)&&($isobject($get(tQuickStream))) do tQuickStream.Clear()
+		if ($isobject($get(tFHIRResponse)))&&(tFHIRResponse.%Extends("HS.Message.FHIR.Base"))&&(tFHIRResponse.QuickStreamId'="") {
+			set tResponseQuickStream = ##class(HS.SDA3.QuickStream).%OpenId(tFHIRResponse.QuickStreamId)
+			if $isobject(tResponseQuickStream) do tResponseQuickStream.Clear()
+			set tFHIRResponse.QuickStreamId = ""
+		}
+	
+	
+	quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="InsertPatientFHIRSTU3">
+<FormalSpec>pMRN,Interaction="transaction",pBundleStream,*tFHIRResponse</FormalSpec>
+<Implementation><![CDATA[
+	
+	set tSC = ##class(%RoutineMgr).GetWebServerPort(.tPort)
+		if $$$ISERR(tSC) set tSC = $$$ERROR($$$GeneralError, "Could not get web server port") quit
+		set tHost = $zconvert($$$HSNetworkHostName, "L")
+		set tLocalHostAndPort = tHost_$select(tPort'="":":",1:"")_tPort
+		
+		set tFHIRRequest = ##class(HS.Message.FHIR.Request).%New()
+		set tFHIRRequest.Interaction =Interaction
+		set tFHIRRequest.Type = "Bundle"
+		set tFHIRRequest.ContentType = ..FHIRFormat
+		set tFHIRRequest.FHIRVersion = ..FormatFHIROutput
+		set tFHIRRequest.FormatFHIROutput = ..FormatFHIROutput
+		set tFHIRRequest.SessionApplication = ..SessionApplication
+		set tFHIRRequest.SessionId = ""
+		set tFHIRRequest.Id = pMRN
+		do tFHIRRequest.Headers.SetAt(tLocalHostAndPort,"HOST")
+		if ..OutputToQuickStream {
+			set tQuickStream = ##class(HS.SDA3.QuickStream).%New()
+			set tFHIRRequest.QuickStreamId = tQuickStream.%Id()
+			set tSC = tQuickStream.CopyFrom(pBundleStream)
+		} else {
+			set tSC = tFHIRRequest.Payload.CopyFrom(pBundleStream)
+		}
+		if $$$ISERR(tSC) quit
+		do:..FullTransactionResponse tFHIRRequest.Headers.SetAt("return=representation", "PREFER")
+		set tSC = ..SendRequestSync(..FHIRRepoConfigName, tFHIRRequest, .tFHIRResponse)
+		if $$$ISERR(tSC) quit
+		if (..OutputToQuickStream)&&($isobject($get(tQuickStream))) do tQuickStream.Clear()
+			if ($isobject($get(tFHIRResponse)))&&(tFHIRResponse.%Extends("HS.Message.FHIR.Base"))&&(tFHIRResponse.QuickStreamId'="") {
+			set tResponseQuickStream = ##class(HS.SDA3.QuickStream).%OpenId(tFHIRResponse.QuickStreamId)
+			if $isobject(tResponseQuickStream) do tResponseQuickStream.Clear()
+			set tFHIRResponse.QuickStreamId = ""
+		}
+	quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="InsertPatientFHIRJSON">
+<FormalSpec>pMRN,Interaction="PUT",pBundleStream,*tFHIRResponse</FormalSpec>
+<Implementation><![CDATA[
+	
+	set tFHIRRequest=$classmethod("HS.FHIRServer.Interop.Request","%New")
+	do pBundleStream.Rewind()
+	set tQuickStream = ##class(HS.SDA3.QuickStream).%New()
+	set tFHIRRequest.QuickStreamId = tQuickStream.%Id()
+	set tSC = tQuickStream.CopyFrom(pBundleStream)
+	set tFHIRRequest.Request.SessionId = ""
+	set tFHIRRequest.Request.SessionApplication=..SessionApplication  
+	set tFHIRRequest.Request.ResponseFormatCode="JSON"
+	set tFHIRRequest.Request.RequestFormatCode="JSON"
+	if Interaction="PUT"
+	{
+		set tFHIRRequest.Request.RequestPath=""
+	}
+	else
+	{
+		set tFHIRRequest.Request.RequestPath="/Patient/"_pMRN
+	}
+	set tFHIRRequest.Request.RequestMethod="POST"
+	$$$TRACE("before request")
+	
+	set tSC = ..SendRequestSync(..FHIRRepoConfigName, tFHIRRequest, .tFHIRResponse)
+	
+	if $$$ISERR(tSC) quit
+	if (..OutputToQuickStream)&&($isobject($get(tQuickStream))) do tQuickStream.Clear()
+	if ($isobject($get(tFHIRResponse)))&&(tFHIRResponse.%Extends("HS.Message.FHIR.Base"))&&(tFHIRResponse.QuickStreamId'="") {
+		set tResponseQuickStream = ##class(HS.SDA3.QuickStream).%OpenId(tFHIRResponse.QuickStreamId)
+		if $isobject(tResponseQuickStream) do tResponseQuickStream.Clear()
+		set tFHIRResponse.QuickStreamId = ""
+	}
+	
+	quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="OnInit">
+<FormalSpec>pRequest:%Library.Persistent,*pResponse:%Library.Persistent</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set sc=##super()
+ 
+	quit sc
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DefaultData>TCToFHIRDefaultData</DefaultData>
+<Data name="TCToFHIRDefaultData">
+<Subscript>"TCToFHIR"</Subscript>
+<Value name="1">
+<Value>FHIRRepoConfigName</Value>
+</Value>
+<Value name="2">
+<Value>SDAToFHIRConfigName</Value>
+</Value>
+<Value name="3">
+<Value>SessionApplication</Value>
+</Value>
+<Value name="4">
+<Value>FHIRVersion</Value>
+</Value>
+<Value name="5">
+<Value>FHIRFormat</Value>
+</Value>
+<Value name="6">
+<Value>FormatFHIROutput</Value>
+</Value>
+<Value name="7">
+<Value>OutputToQuickStream</Value>
+</Value>
+<Value name="8">
+<Value>FullTransactionResponse</Value>
+</Value>
+<Value name="9">
+<Value>EnabledDataSegments</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
 <Class name="TC.hmf.FHIR.Server.Service.EmailService">
 <Super>Ens.BusinessService</Super>
 <TimeChanged>66161,56546.4619616</TimeChanged>
@@ -34336,6 +35204,60 @@ Business host to which to forward the api request message.</Description>
 </Class>
 
 
+<Class name="TC.hmf.FHIR.Server.Service.TCInboundSDA3">
+<Super>EnsLib.SOAP.Service</Super>
+<TimeChanged>66226,47842.0703999</TimeChanged>
+<TimeCreated>66226,44051.0563323</TimeCreated>
+
+<Parameter name="SETTINGS">
+<Default><![CDATA[TCInboundConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId}]]></Default>
+</Parameter>
+
+<Property name="TCInboundConfigName">
+<Description>
+Business host to which to forward the api request message.</Description>
+<Type>Ens.DataType.ConfigName</Type>
+</Property>
+
+<Method name="OnProcessInput">
+<FormalSpec>pInput:HS.Message.XMLMessage,*pOutput:Ens.Response</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+
+ set sc=..SendRequestSync(..TCInboundConfigName,pInput,.pResponse,60)
+ 
+ quit sc
+]]></Implementation>
+</Method>
+
+<Method name="Send">
+<FormalSpec>pInput:HS.Message.XMLMessage,*pOutput:Ens.Response</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<WebMethod>1</WebMethod>
+<Implementation><![CDATA[
+ if $g(pMsg)="" set pMsg=pInput
+ do pMsg.AdditionalInfo.SetAt("TC.hmf.FHIR.Server.Service.TCInbound.SDA3","Interface")
+ do pMsg.AdditionalInfo.SetAt("Outbound","MessageDirection")
+ set sc=..ProcessInput(pMsg,.pOutput)
+ if $$$ISERR(sc) do ..ReturnMethodStatusFault(sc)
+ quit sc
+]]></Implementation>
+</Method>
+
+<Parameter name="ADAPTER">
+<Default>EnsLib.SOAP.InboundAdapter</Default>
+</Parameter>
+
+<Parameter name="NAMESPACE">
+<Default>http://www.intersystems.com/trak/ws</Default>
+</Parameter>
+
+<Parameter name="SERVICENAME">
+<Default>TC.hmf.FHIR.Server.Service.TCInboundSDA3</Default>
+</Parameter>
+</Class>
+
+
 <Class name="TC.hmf.FHIR.Server.Service.TCRouterService">
 <Super>Ens.BusinessService</Super>
 <TimeChanged>66161,55684.4645478</TimeChanged>
@@ -34387,7 +35309,7 @@ Business host to which to forward the api request message.</Description>
 <Description>
 utility to clean patient data from FHIR repositry </Description>
 <Super>%RegisteredObject</Super>
-<TimeChanged>66031,39423.4820228</TimeChanged>
+<TimeChanged>66217,61730.4449066</TimeChanged>
 <TimeCreated>65839,59668.728224</TimeCreated>
 
 <UDLText name="T">
@@ -34402,8 +35324,6 @@ utility to clean patient data from FHIR repositry </Description>
 <FormalSpec>PatientID,pFHIRVersion,appname</FormalSpec>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
-	
-	 
 	
 	if (pFHIRVersion="DSTU2")
 	{
@@ -34841,6 +35761,472 @@ web server before assuming that the web server is not responding. If not set her
 This Parameter is updated by Perforce</Description>
 <Default>$Id: //trak/main/projects/T2020/XX06_HMF/cls/TC/hmf/FHIR/Server/wsClient.xml#3 $</Default>
 </Parameter>
+</Class>
+
+
+<Class name="TC.hmf.FHIR.SmartCard.Demo">
+<Super>%CSP.Page,TC.hmf.FHIR.SmartCard.Utils</Super>
+<TimeChanged>66217,44876.1480406</TimeChanged>
+<TimeCreated>66217,36177.5419091</TimeCreated>
+
+<Method name="OnPage">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	try 
+	{
+		do ..GenSmartCard(500,"Q",.pJOSN, .pToken, .pJWS, .pJWSCard, .pQRData,420,.DataURI )
+ 
+	
+		&html<
+		<br/>
+		<label for="JOSN">JOSN:</label>
+		<br/>
+		<textarea id="JOSN" name="JOSN" rows="10" cols="300">
+		>
+		w !,pJOSN
+		&html<
+		</textarea>
+		>
+		
+		&html<
+		<br/>
+		<label for="JWS">JWS:</label>
+		<br/>
+		<textarea id="JWS" name="JWS" rows="10" cols="300">
+		>
+		w !,pJWS
+		&html<</textarea> >
+		
+		&html<
+		<br/>
+		<label for="JWSCard">JWSCard:</label>
+		<br/>
+		<textarea id="JWSCard" name="JWSCard" rows="10" cols="300">
+		>
+		w !,pJWSCard
+		&html<
+		</textarea>
+		>
+
+		
+		&html<
+		<br/>
+		<label for="pQRData">QR Data:</label>
+		<br/>
+		<textarea id="pQRData" name="pQRData" rows="10" cols="300">
+		>
+		w !,pQRData
+		&html<
+		</textarea>
+		>
+	
+		&html<
+		<br/>
+		<label for="JOSN">QR Code:</label>
+		<br/>
+		>
+		
+
+		
+		w !,"<img  src="_DataURI_"  />"
+		
+		
+		w !,"<a href='https://demo-portals.smarthealth.cards/VerifierPortal.html' target='_blank'> Verify Portal </a>"
+		
+	}
+	catch (exp)
+	{
+		
+		zw exp	
+		
+	}
+	quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="GenSmartCard">
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[qrsize=300,qrmode="Q",&pJSON,&pToken,&pJWS,&pJWSCardData,&pQRData="",pQRSize,&pQRDataURI]]></FormalSpec>
+<Implementation><![CDATA[
+	
+	//do ##class(Test.Demo).GenerateSmartCard()
+	set pJSON=..GetJSON()
+	set tsc=..GetSmartCardJWS(pJSON,1,.pToken,.pJWS,.pJWSCardData,.pQRData,pQRSize,.pQRDataURI)
+	q $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="GetJSON">
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+	set bodyJSON={"iss":"https://spec.smarthealth.cards/examples/issuer","nbf":1632659553.548,"vc":{"type":["https://smarthealth.cards#health-card","https://smarthealth.cards#immunization","https://smarthealth.cards#covid19"],"credentialSubject":{"fhirVersion":"4.0.1","fhirBundle":{"resourceType":"Bundle","type":"collection","entry":[{"fullUrl":"resource:0","resource":{"resourceType":"Patient","name":[{"family":"Anyperson","given":["Jane","C."]}],"birthDate":"1961-01-20"}},{"fullUrl":"resource:1","resource":{"resourceType":"Immunization","status":"completed","vaccineCode":{"coding":[{"system":"http://hl7.org/fhir/sid/cvx","code":"208"}]},"patient":{"reference":"resource:0"},"occurrenceDateTime":"2021-01-01","performer":[{"actor":{"display":"ABC General Hospital"}}],"lotNumber":"0000002"}},{"fullUrl":"resource:2","resource":{"resourceType":"Immunization","status":"completed","vaccineCode":{"coding":[{"system":"http://hl7.org/fhir/sid/cvx","code":"208"}]},"patient":{"reference":"resource:0"},"occurrenceDateTime":"2021-01-29","performer":[{"actor":{"display":"ABC General Hospital"}}],"lotNumber":"0000008"}}]}}}}
+	do ..OverrideJson(.bodyJSON) // demo data 
+ 	set body =bodyJSON.%ToJSON()
+ 	quit body
+]]></Implementation>
+</Method>
+
+<Method name="OverrideJson">
+<Description>
+override demo data </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[&bodyJSON]]></FormalSpec>
+<Implementation><![CDATA[
+	set tPatientFamily="Farahat"
+	set tPatientGiven="Eslam"
+	set tPatientMiddle="M."
+	set tPatientDOB="2012-05-07"
+	set tHospital="TrakCare Demo"
+	set issuer="https://tcfhirsandbox.intersystems.com.au/issuer"
+	set bodyJSON.iss=issuer
+	set iter = bodyJSON.vc.credentialSubject.fhirBundle.entry.%GetIterator()
+   	while iter.%GetNext(.key, .value) { 
+   	set resource=bodyJSON.vc.credentialSubject.fhirBundle.entry.%Get(key)
+   	if (resource.resource.resourceType="Patient")
+   	{
+	   	do resource.resource.name.%Get(0).%Set("family",tPatientFamily)
+	   	do resource.resource.name.%Get(0).%Set("given",[(tPatientGiven),(tPatientMiddle)])
+ 		do resource.resource.%Set("birthDate",tPatientDOB)
+   	}
+   	else
+   	{
+	   	if (resource.resource.%Get("performer")'="")&&(resource.resource.performer.%Get(0).actor'="")
+	   	{
+		   	set resource.resource.performer.%Get(0).actor.display=tHospital 
+	   	}
+	   	if (resource.resource.%Get("performer")'="")&&(resource.resource.performer.%Get(0).display'="")
+	   	{
+		   	set resource.resource.performer.%Get(0).display=tHospital 
+	   	}
+   	}
+   }
+   	quit $$$OK
+]]></Implementation>
+</Method>
+</Class>
+
+
+<Class name="TC.hmf.FHIR.SmartCard.Utils">
+<Super>%RegisteredObject</Super>
+<TimeChanged>66218,47164.4168219</TimeChanged>
+<TimeCreated>66217,36121.0572505</TimeCreated>
+
+<Method name="GetSmartJsonObject">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>pType=2</FormalSpec>
+<ReturnType>%DynamicObject</ReturnType>
+<Implementation><![CDATA[
+	set tSmartJSON=
+	{
+	  "iss": (..GetIssuer()),
+	  "nbf": (..GetNBF()),
+	  "vc": {
+	    "type": [],
+	    "credentialSubject": {
+	      "fhirVersion": "4.0.1",
+	      "fhirBundle": {
+	        "resourceType": "Bundle",
+	        "type": "collection",
+	        "entry": []
+	      }
+	    }
+	   }
+	 }
+	 
+	 if (pType=1)
+	 {
+		set tSmartJSON.vc.type=["https://smarthealth.cards#health-card"]
+	 }
+	 elseif (pType=2)
+	 {
+		set tSmartJSON.vc.type=["https://smarthealth.cards#immunization"]
+	 }
+	 if (pType=3)
+	 {
+		set tSmartJSON.vc.type=["https://smarthealth.cards#covid19"]
+	 }
+	 
+	 
+	 Quit tSmartJSON
+]]></Implementation>
+</Method>
+
+<Method name="GetIssuer">
+<Description>
+get issuer</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[	Quit "https://tcfhirsandbox.intersystems.com.au/issuer"
+]]></Implementation>
+</Method>
+
+<Method name="GetNBF">
+<Description>
+get NBF</Description>
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[	Quit 1632659553.548
+]]></Implementation>
+</Method>
+
+<Method name="GetKeyDetails">
+<Description>
+get key details </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[&pKeyID,&pKeyData]]></FormalSpec>
+<Implementation><![CDATA[
+	
+	set pKeyID="e9no4IRwIAk6KBAtu8vNIsk1mztxRsQERTZ0uFWu2ZA"
+	
+	set pKeyData="-----BEGIN PRIVATE KEY-----"
+	set pKeyData=pKeyData_$c(13,10)_"MEECAQAwEwYHKoZIzj0CAQYIKoZIzj0DAQcEJzAlAgEBBCBDFXemsfll/b435xPn"
+	set pKeyData=pKeyData_$c(13,10)_"DC3Ml4uxfdn47bSqJq4qc5/Xog=="
+	set pKeyData=pKeyData_$c(13,10)_"-----END PRIVATE KEY-----"
+]]></Implementation>
+</Method>
+
+<Method name="GetSmartCardJWS">
+<Description>
+genrate smart card based on json </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[pBody:%String,pEncodeSignature=0,&pToken,&pJWS,&pCardData,pCardQRData,pQRSize=0,&pQRDataURI]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	do ..GetKeyDetails(.pKid,.pPrivateKey)
+	set header={"zip":"DEF","alg":"ES256","kid":(pKid)}.%ToJSON()
+	set pBody=..InflateString(pBody)
+	set pToken=$$$BASE64URLENCODE(header)_"."_$$$BASE64URLENCODE(pBody)
+	set tSiganture= ##class(%SYSTEM.Encryption).ECSHASign(256,pToken,pPrivateKey)
+	if (pEncodeSignature)
+	{
+		set tSiganture=..SignToJWSSign(tSiganture) 
+	}
+	set tSignBase64=$$$BASE64URLENCODE(tSiganture)
+	set pJWS=pToken_"."_tSignBase64
+	set pCardData={"verifiableCredential": [ (pJWS)]}.%ToJSON()
+	set pCardQRData= ..JWSToQRCode(pJWS)
+	if (pQRSize>0)
+	{
+		s Status=##Class(%SYS.QRCode).GenerateImage(pCardQRData,,.pQRDataURI,pQRSize,"Q")
+	}
+	quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="SignToJWSSign">
+<Description>
+signature to JWS format </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>sig</FormalSpec>
+<Implementation><![CDATA[
+	set hexArray=##class(%SYS.X509Credentials).BinaryToHexString(sig) 
+	 set r=$p(hexArray,"02 2",2)
+	 set s=$p(hexArray,"02 2",3)
+	 set r=$replace(r," ","")
+	 set s=$replace(s," ","")
+	 set r=$extract(r,*-63,*)
+	 set s=$extract(s,*-63,*)
+	 set r=..HexToAscii(r)
+	 set s=..HexToAscii(s)
+	set newsign=r_s
+	q newsign
+]]></Implementation>
+</Method>
+
+<Method name="JWSToQRCode">
+<Description>
+JWS to smart card format </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>payload=""</FormalSpec>
+<Implementation><![CDATA[
+ 	set qr="shc:/"
+	FOR index=1:1:$length(payload) {
+    		 set char=$EXTRACT(payload,index)
+    		 set value=$ascii(char)-45
+    		 if value<10 set value="0"_value
+    		 set qr=qr_""_value
+  	}
+	q qr
+]]></Implementation>
+</Method>
+
+<Method name="HexToAscii">
+<Description>
+transform hex to ascii </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>hex</FormalSpec>
+<Implementation><![CDATA[
+   if $length(hex)#2 zt "ELEN" // trap, two hex chars should make up each byte
+   set str=""
+   for i=1:2:$length(hex) set str=str_$char($zhex($extract(hex,i,i+1)))
+   quit str
+]]></Implementation>
+</Method>
+
+<Method name="GetStreamData">
+<Description>
+load stream from file </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>file</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
+ 	Set stream=##class(%Stream.FileBinary).%New()
+  	Set sc=stream.LinkToFile(file)
+	set result=stream.Read()
+	q result
+]]></Implementation>
+</Method>
+
+<Method name="SaveStreamData">
+<Description>
+save stream to file </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>file,data</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	 Set stream=##class(%Stream.FileBinary).%New()
+ 	Set sc=stream.LinkToFile(file)
+  	Set sc=stream.Write(data)
+  	q stream.%Save()
+]]></Implementation>
+</Method>
+
+<Method name="Base64FromStream">
+<Description>
+get base64 from stream </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>pStream:%Stream,*pEncoded:%Stream</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+    #dim tSC As %Status = $$$OK
+    #dim e As %Exception.AbstractException
+    #dim tLen As %Integer
+    Try {
+        Set tSC=pStream.Rewind()
+        If $$$ISERR(tSC) Quit
+        Set pEncoded=##class(%Stream.TmpCharacter).%New()
+        set tLen=5700
+        while 'pStream.AtEnd {
+            Set tSC=pEncoded.Write($system.Encryption.Base64Encode(pStream.Read(.tLen)))
+            If $$$ISERR(tSC) Quit
+            Set tLen=5700
+        }
+        If $$$ISERR(tSC) Quit
+        Set tSC=pEncoded.Rewind()
+    } Catch (e) {
+        Set tSC=e.AsStatus()
+    }
+    Quit tSC
+]]></Implementation>
+</Method>
+
+<Method name="DeflateString">
+<Description>
+Compress string in Deflate format </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>payload</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
+	set sourceFile=##class(%File).TempFilename("txt")
+	set TargetFile=##class(%File).TempFilename("txt")
+	Set stream=##class(%Stream.FileBinary).%New()
+  	Set sc=stream.LinkToFile(sourceFile)
+  	Set sc=stream.Write(payload)
+  	do stream.%Save()
+  	set tsc= ..DeflateFile(sourceFile,TargetFile)
+  	Set sc=stream.LinkToFile(TargetFile)
+  	set result=stream.Read()
+	do ##class(%File).%Delete(sourceFile)
+	do ##class(%File).%Delete(TargetFile)
+	q result
+]]></Implementation>
+</Method>
+
+<Method name="InflateString">
+<Description>
+Decompress string in Deflate format </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>payload</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
+	set sourceFile=##class(%File).TempFilename("txt")
+	set TargetFile=##class(%File).TempFilename("txt")
+	Set stream=##class(%Stream.FileBinary).%New()
+  	Set sc=stream.LinkToFile(sourceFile)
+  	Set sc=stream.Write(payload)
+  	do stream.%Save()
+  	set tsc=..InflateFile(sourceFile,TargetFile)
+  	Set sc=stream.LinkToFile(TargetFile)
+  	set result=stream.Read()
+	do ##class(%File).%Delete(sourceFile)
+	do ##class(%File).%Delete(TargetFile)
+	q result
+]]></Implementation>
+</Method>
+
+<Method name="InflateFile">
+<Description>
+Decompress file in Deflate format </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>srcfile,rzfile</FormalSpec>
+<Implementation><![CDATA[
+	set tsc=$$$OK
+	open rzfile:("WUN"):0 e  q $$$ERROR(100,"unable to open "_rzfile)
+	use rzfile:/COMPRESS="deflate"
+	open srcfile:("R"):0 e  q $$$ERROR(100,"unable to open "_srcfile)
+	f i=0:1{
+		use srcfile
+		try{
+			read data	
+		}
+		catch exp{
+			close rzfile
+			close srcfile
+			return exp 
+		}
+		if data=""{
+			close rzfile
+			close srcfile
+			return
+		} 
+		use rzfile
+		write data
+	}
+	q tsc
+]]></Implementation>
+</Method>
+
+<Method name="DeflateFile">
+<Description>
+Compress file in Deflate format </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>srcfile:%String,rzfile:%String</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set tsc=$$$OK
+	open rzfile:("WUN"):0 e  q $$$ERROR(100,"unable to open "_rzfile)
+	use rzfile
+	open srcfile:("R"):0 e  q $$$ERROR(100,"unable to open "_srcfile)
+	f i=0:1{
+		use srcfile:/COMPRESS="deflate"
+		try{
+			read data	
+		}
+		catch (exp){
+			close rzfile
+			close srcfile
+			return exp
+		}
+		if data=""{
+			close rzfile
+			close srcfile
+			return
+		} 
+		use rzfile
+		write data
+	}
+	q tsc
+]]></Implementation>
+</Method>
 </Class>
 
 
@@ -35352,7 +36738,7 @@ is to throw an exception and exit transformation.
 
 <Class name="TC.hmf.FHIR.Transform.SDA3.Encounter">
 <Super>Ens.DataTransformDTL</Super>
-<TimeChanged>66030,86072.4019058</TimeChanged>
+<TimeChanged>66228,36517.7197961</TimeChanged>
 <TimeCreated>66007,28459.299186</TimeCreated>
 <DependsOn>HS.SDA3.Encounter</DependsOn>
 
@@ -35368,11 +36754,52 @@ is to throw an exception and exit transformation.
 <Default>0</Default>
 </Parameter>
 
+<Method name="GetEpisodeStatus">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>FromTime,ToTime</FormalSpec>
+<Implementation><![CDATA[
+	set tStatus=""
+	if ((FromTime="") && (ToTime=""))
+	{
+		set tStatus="unknown"
+	}
+	elseif ((FromTime'="") && (ToTime=""))
+	{
+		set fromdateh= ##class(TC.hmf.FHIR.Transform.SDA3.Encounter).XMLToHDate(FromTime)
+	 	if fromdateh>=$h
+	 	{
+		 	set tStatus="planned"
+	 	}
+	 	else
+	 	{
+		 	set tStatus="in-progress"
+	 	}
+	}
+	elseif ((FromTime'="") && (ToTime'=""))
+	{
+		set tStatus="finished"
+	}
+	
+	quit tStatus
+]]></Implementation>
+</Method>
+
+<Method name="XMLToHDate">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>sdadatetime="2019-05-21T09:00:00Z"</FormalSpec>
+<Implementation><![CDATA[
+	set date=$Extract($Translate($Piece(sdadatetime,"T"),"\ "),1,10)
+	set hdate=$zdateh(date,3)
+	quit hdate
+]]></Implementation>
+</Method>
+
 <Method name="GetLocationCode">
 <ClassMethod>1</ClassMethod>
 <FormalSpec>Ward,Room,Bed</FormalSpec>
 <Implementation><![CDATA[
-	set location=Ward
+	set location=$p(Ward,"^",1)
+	/*
 	if $g(Room)'=""
 	{
 		set location=location_"."_Room
@@ -35381,6 +36808,7 @@ is to throw an exception and exit transformation.
 	{
 		set location=location_"."_Bed
 	}
+	*/
 	quit location
 ]]></Implementation>
 </Method>
@@ -35389,6 +36817,8 @@ is to throw an exception and exit transformation.
 <ClassMethod>1</ClassMethod>
 <FormalSpec>Ward,Room,Bed</FormalSpec>
 <Implementation><![CDATA[
+	set location=$p(Ward,"^",2)
+	/*
 	set location="Ward "_Ward
 	if $g(Room)'=""
 	{
@@ -35398,6 +36828,7 @@ is to throw an exception and exit transformation.
 	{
 		set location=location_",Bed "_Bed
 	}
+	*/
 	quit location
 ]]></Implementation>
 </Method>
@@ -35417,6 +36848,12 @@ is to throw an exception and exit transformation.
 
 </true>
 </if>
+<assign value='source.ToTime' property='target.EndTime' action='set' />
+<assign value='..GetEpisodeStatus(source.FromTime,source.ToTime)' property='target.Status.Code' action='set' />
+<code>
+
+</code>
+
 </transform>
 ]]></Data>
 </XData>
@@ -35508,7 +36945,7 @@ Context search methods.</Description>
 <IncludeCode>Ensemble</IncludeCode>
 <Super>%ZEN.Portal.ContextSearch</Super>
 <System>4</System>
-<TimeChanged>66007,38894.670949</TimeChanged>
+<TimeChanged>66226,52432.2865462</TimeChanged>
 <TimeCreated>61579,56265.914196</TimeCreated>
 
 <Method name="TransformSDAContainer">
@@ -35525,19 +36962,7 @@ Context search methods.</Description>
 	    do newSDAObj.ToQuickXML()
 		 
 		 
-		/*
-		if $$$ISERR(tSC) quit tSC
-		while tSDAContainer.GetNextSDA(.tSDAType, .tSDAObj, .tSC) {
-			quit:$$$ISERR(tSC)
-			if tSDAType = "Observation" {
-				#Dim tSDAObj As HS.SD3.Observation
-				set tsc=##class(TC.hmf.FHIR.Transform.SDA3.Observation).Transform(tSDAObj,.newSDAObj)
-				set tSDAObj=newSDAObj
-			}
-			kill tSDAObj
-		}
-		
-	 	 */
+
   		
 		 
 		
@@ -36660,7 +38085,7 @@ This Parameter is updated by Perforce</Description>
 
 
 
-<Project name="TCITK" LastModified="2022-04-08 17:41:05.509867">
+<Project name="TCITK" LastModified="2022-04-28 19:07:13.5610314">
   <Items>
     <ProjectItem name="%ZHS.HC.OAuth2.Utils" type="CLS"></ProjectItem>
     <ProjectItem name="HS.Local.FHIR.DTL" type="PKG"></ProjectItem>
@@ -37987,7 +39412,7 @@ This XML block defines the contents of the menu pane.</Description>
 Home page for the HealthShare Management Portal.</Description>
 <IncludeCode>%sySystem,HS.HC.UI.Home,%ZHSLIB</IncludeCode>
 <Super>HS.UI.Base</Super>
-<TimeChanged>66044,53952.222131</TimeChanged>
+<TimeChanged>66218,34928.6823042</TimeChanged>
 <TimeCreated>65468,76488.785131</TimeCreated>
 
 <Parameter name="FAVORITEICON">
@@ -39274,6 +40699,7 @@ pArgs - subscripts used when for submenu structure within the array</Description
 	//Do:tEditSyncTables ..AddOption("FHIR Test Utility","Update SMART On FHIR Details","TCITK\SOFA Registry","TCITK.UI.SmartOnFHirApps.cls",,,,.pData,.n1)
 	Do:tEditSyncTables ..AddOption("SMART On FHIR Test Utility","Update SMART On FHIR Details","TCITK\SOFA Test","TCITK.UI.SmartOnFHirAppsTest.cls",,,,.pData,.n1)
 	Do:tEditSyncTables ..AddOption("FHIR Test Utility","Open Demo Wizard","TCITK\FHIR Test Page","TCITK.UI.FHIRTest.cls",,,,.pData,.n1)
+	Do:tEditSyncTables ..AddOption("Smart Health Cards","Open Smart Health Cards","TCITK\Smart Health Cards","TCITK.UI.SHC.cls",,,,.pData,.n1)
 	Do:tEditSyncTables ..AddOption("TrakCare API Demo","Open Demo Wizard","TCITK TCAPI\FHIR Test Page","TCITK.UI.TCAPITest.cls",,,,.pData,.n1)
 	
  	
@@ -40504,18 +41930,19 @@ Add any customized menu options for a product</Description>
 
 <Class name="TCITK.UI.Query">
 <Super>%RegisteredObject</Super>
-<TimeChanged>66167,53910.3427</TimeChanged>
+<TimeChanged>66218,39137.1498291</TimeChanged>
 <TimeCreated>66020,16709.785862</TimeCreated>
 
 <Query name="FHIRSEndpointQuery">
 <Type>%Query</Type>
+<FormalSpec>Type:%String=""</FormalSpec>
 <SqlProc>1</SqlProc>
 <Parameter name="ROWSPEC" value="Endpoint"/>
 </Query>
 
 <Method name="FHIRSEndpointQueryExecute">
 <ClassMethod>1</ClassMethod>
-<FormalSpec><![CDATA[&qHandle:%Binary]]></FormalSpec>
+<FormalSpec><![CDATA[&qHandle:%Binary,Type:%String=""]]></FormalSpec>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
     set repid=$increment(^CacheTemp("TRAK"))
@@ -40536,6 +41963,11 @@ Add any customized menu options for a product</Description>
 	 		set OAuthClient =$li(arrData(endpoint),3)
 	 		set FHIRVersion =$li(arrData(endpoint),1)
 	 		continue:(OAuthClient'="")&&(FHIRVersion'="R4")
+	 		if ((Type'="")&&(Type'=FHIRVersion))
+	 		{
+		 		continue
+	 		}
+	 		
 	 		set name=endpoint
 	 		set ^CacheTemp("TRAK",repid,ind)=$lb(name)
  			set ind=ind+1		
@@ -40578,6 +42010,655 @@ Add any customized menu options for a product</Description>
 <Implementation><![CDATA[
         KILL qHandle   //probably not necesary as killed by the SQL Call framework
         QUIT $$$OK
+]]></Implementation>
+</Method>
+
+<Query name="SmartCardResultQuery">
+<Type>%Query</Type>
+<SqlProc>1</SqlProc>
+<Parameter name="ROWSPEC" value="ID,Type,Description,JSON,QRData,QRDataURI"/>
+</Query>
+
+<Method name="SmartCardResultQueryExecute">
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[&qHandle:%Binary]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+   set repid=$increment(^CacheTemp("TRAK"))
+   set ind=1, END = 0, END1 = 0
+ 
+ 
+ 	Set tFormat=$get(%session.Data("SmartCard.Format"))
+	Set tPayLoad=$get(%session.Data("SmartCard.PayLoad"))
+	
+	if tFormat="JSON"
+	{
+		set tEntryBundle=##class(%Library.DynamicObject).%FromJSON(tPayLoad) 
+		set iter = tEntryBundle.Cards.%GetIterator()
+    	while iter.%GetNext(.key, .tEntryRecord, .type ) {
+		
+			set SourceID=tEntryRecord.SourceID
+			set SourceType=tEntryRecord.SourceType
+			set SourceDesc=tEntryRecord.SourceDesc
+			
+			set JSON=tEntryRecord.JSON
+			set QRData=tEntryRecord.QRData
+			set QRDataURI=tEntryRecord.QRDataURI
+			
+			
+			set ^CacheTemp("TRAK",repid,ind)=$lb(SourceID,SourceType,SourceDesc,JSON,QRData,QRDataURI)
+ 			set ind=ind+1	
+
+    	}
+		
+	}
+	
+ 
+ 	//set ^CacheTemp("TRAK",repid,ind)=$lb(name)
+ 	//		set ind=ind+1	
+ 
+    set qHandle=$listbuild(0,repid,0)
+    QUIT $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="SmartCardResultQueryFetch">
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[&qHandle:%Binary,&Row:%List,&AtEnd:%Integer=0]]></FormalSpec>
+<PlaceAfter>SmartCardResultQueryExecute</PlaceAfter>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+     // This fetch method should never have to change.
+	// Restore QHandle
+	set AtEnd=$list(qHandle,1)
+	set repid=$list(qHandle,2)
+	set ind=$list(qHandle,3)
+	set ind=$order(^CacheTemp("TRAK",repid,ind))
+	if ind="" {	// if there are no more rows, finish fetching
+		set AtEnd=1
+		set Row=""
+	}  else  {	// fetch row
+		set Row=^CacheTemp("TRAK",repid,ind)
+	}
+	// Save QHandle
+	set qHandle=$listbuild(AtEnd,repid,ind)
+        QUIT $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="SmartCardResultQueryClose">
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[&qHandle:%Binary]]></FormalSpec>
+<PlaceAfter>SmartCardResultQueryExecute</PlaceAfter>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+        KILL qHandle   //probably not necesary as killed by the SQL Call framework
+        QUIT $$$OK
+]]></Implementation>
+</Method>
+</Class>
+
+
+<Class name="TCITK.UI.SHC">
+<Description>
+Define and manage FHIR CSP application behaviors that are not covered in CSP application maintenance.</Description>
+<Super>TCITK.UI.Util</Super>
+<TimeChanged>66218,43707.911481</TimeChanged>
+<TimeCreated>65468,76707.179559</TimeCreated>
+
+<Parameter name="APPLICATION">
+<Description>
+Class name of application this page belongs to.</Description>
+<Default>TCITK.UI.Application</Default>
+</Parameter>
+
+<Parameter name="PAGENAME">
+<Default>Smart Health Cards</Default>
+</Parameter>
+
+<Parameter name="RESOURCE">
+<Description>
+Security requirement</Description>
+<Default>%HSAdmin_InstallationManagement</Default>
+</Parameter>
+
+<Parameter name="FAVORITEICON">
+<Type>COSEXPRESSION</Type>
+<Default>$$$ISCFAVORITEICON</Default>
+</Parameter>
+
+<XData name="Style">
+<Description>
+This Style block contains page-specific CSS style definitions.</Description>
+<Data><![CDATA[
+<style type="text/css">
+table.HSTitle {
+	background: #80C9D1;
+	width: 100%;
+	padding: 0px;
+	border-bottom: 2px solid #D7D3CA;
+	font-size: 1.4em;
+	text-align: center;
+}
+
+.labelTitle {
+	color: black;
+	font-size: 18px;
+	font-weight: bold;
+	text-decoration: none;
+}
+.linkBox {
+	border: 1px solid black;
+	margin:  5px;
+	padding: 5px;
+	width: 400px;	
+}
+.button {
+	background: #D3E1EE;
+	font-size: 12px;
+	padding-bottom: 2px;
+	width: 220px;
+}
+/* table */
+#table {
+	height: 20.0em;
+	overflow: auto;
+}
+/* column header (th) */
+table.tpTable th {
+	border-right: 1px solid gray;
+	border-bottom: 1px solid gray;
+	background: #9CB0C8;
+	color: black;
+	font-weight: bold;
+	text-align: left;
+	padding: 2px;
+}
+
+.modalGroupBody {
+	background: white;
+	width: 900px ;
+}
+
+</style>
+]]></Data>
+</XData>
+
+<XData name="Contents">
+<Description>
+This page display a welcome message and asks user if they want to start configure</Description>
+<XMLNamespace>http://www.intersystems.com/zen</XMLNamespace>
+<Data><![CDATA[
+<page xmlns="http://www.intersystems.com/zen" title="#(%page.StdTitle)#">
+
+<html id="titleBar" OnDrawContent="DrawTitle"/>
+
+<form width="75%" layout="vertical" cellStyle="padding: 2px;" groupStyle="padding-left:10px;" labelPosition="left" enctype="multipart/form-data">
+<spacer height="10"/>
+
+ 
+<dataCombo id="cmbEndpoint" size='70' label="FHIR EndPoint: *" labelClass="caption"
+	editable="false"
+	searchKeyLen="10"
+	OnCreateResultSet="CreateFHIRSEndpointRS"
+	title = "Oauth2 endpoint  will be passed to smart on fhir app"
+	value="/tcfhir/trakr4"
+	>
+	<parameter/>
+</dataCombo>
+<spacer width="5" />
+<combobox id="cmbFormat" label="FHIR Format: *" size="20" tabIndex="35" dropdownHeight="80" 
+title="If 'xml' is chosen, then the FHIR request to the resource server will add an Accept header of 'application/xml+fhir' (for DSTU2) or 'application/fhir+xml' (for STU3 and later). If 'json' is chosen, then the FHIR request to the resource server will add an Accept header of 'application/json+fhir' (for DSTU2) or 'application/fhir+json' (for STU3 and later)." />
+<spacer width="5" />
+ 
+<text label="MRN: " id="txtMRN" size="20" value="DEMO1" />
+ <spacer width="5" />
+<combobox id="cmbResource" label="Type: *" size="20" tabIndex="35" dropdownHeight="80" 
+title="" />
+
+
+
+
+ <spacer height="10"/>
+
+
+<hgroup cellAlign="left">
+<button id="btnSend" caption=" Send  Request To FHIR Endpoint" onclick="zenPage.Send(0)" />
+<spacer width="10px"/>
+<button id="btnExport" caption=" Export Request To Postman  " onclick="zenPage.Send(1)" />
+<spacer height="7px"/>
+</hgroup>
+
+<spacer height="5"/>
+
+<link id="linkTrace" caption="Visual Trace" href="#" target="_blank" disabled="true"    />
+
+<spacer height="10"/>
+ 
+<text label="FHIR Endpoint URL:" id="txtFHIRURL" size="100" value="" readOnly="true" />
+<text label="FHIR Authrization:" id="txtFHIRAuth" size="100" value="" readOnly="true" />
+
+
+
+<tabGroup id="tabGroup" showTabBar="true"
+           remember="true"  >
+
+<tab caption="Results">
+
+<tablePane id="table" caption="Smart Cards"
+		  showQuery="false"
+		  showZebra="true"
+		  showValueInTooltip="true"
+		  valueColumn="ID"
+		  multiSelect="false"
+		  width="100%"
+		  OnCreateResultSet="CreateSmartCardRS"
+		  >
+		   
+		<parameter value="B"/>
+
+		<column colName="ID" header="ID" width="200" />
+		<column colName="Type" header="Type" width="200"/>
+		<column colName="Description" header="Description" width="300"/>
+		<column colName="JSON" header="JSON" hidden="true" />
+		<column colName="QRData" header="QRData"  hidden="true"/>
+		<column colName="QRDataURI" header="QRDataURI" hidden="true"/>
+	
+
+ 	    <column linkCaption="Details" link="javascript:zenPage.showDetails('#(%query.Type)#','#(%query.Description)#','#(%query.JSON)#','#(%query.QRData)#','#(%query.QRDataURI)#');"  width="80"/>
+
+</tablePane>
+</tab>
+
+
+<tab caption="Response">
+<textarea  label="Response:" id="txtResponse" rows="25" cols="120" readOnly="true" value="" />
+ </tab>
+ </tabGroup>
+ 
+</form>
+<vgroup labelClass="lblNormal" labelPosition="left" enclosingStyle="padding:30px;">
+	<link id="smartAppLink" caption="" href="#" target="_blank" />
+ </vgroup>
+ 
+ 
+ <modalGroup id="mgAppDetails" groupTitle="Smart Card Details">
+<pane paneName="paneAppDetails" cellSize="stretch"/>
+</modalGroup>
+ 
+ </page>
+]]></Data>
+</XData>
+
+<XData name="paneAppDetails">
+<XMLNamespace>http://www.intersystems.com/zen</XMLNamespace>
+<Data><![CDATA[
+<pane xmlns="http://www.intersystems.com/zen" labelPosition= "left">
+ 
+
+<hgroup cellAlign="left">
+
+<vgroup labelClass="lblNormal" labelPosition="left" enclosingStyle="padding:4px;">
+<label enclosingStyle="font-size:14px;color:black;font-weight:bold;padding-bottom:4px" value="Smart Card"/>
+<text id="SourceID" label="Source ID: " size="20" labelClass="lblNormal" 
+	title=""
+	hidden="true"
+	/>
+
+
+<text id="SourceType" label="Type: " size="20" labelClass="lblNormal" />
+<text id="SourceDescription" label="Description: " size="30" labelClass="lblNormal" />	
+	
+<textarea id="JSON" label="Card JSON: " rows="10" cols="40"  labelClass="lblNormal" />	
+
+<textarea id="QRData" label="QR Data: "  rows="10" cols="40" labelClass="lblNormal" />	
+	
+	
+ 
+
+
+</vgroup>
+<vgroup labelClass="lblNormal" labelPosition="left" enclosingStyle="padding:4px;">
+ 	
+<image label="" id="QRImage"    />
+
+
+</vgroup>
+
+
+ </hgroup>
+
+
+<hgroup cellAlign="left">
+<button caption="Close" width="50px" onclick="zenPage.endModal();"/>
+<spacer height="7px"/>
+</hgroup>
+</pane>
+]]></Data>
+</XData>
+
+<Method name="showDetails">
+<FormalSpec>type,desc,json,qrdata,qruri</FormalSpec>
+<Language>javascript</Language>
+<ClientMethod>1</ClientMethod>
+<Implementation><![CDATA[
+	
+	zenPage.getComponentById("SourceType").setValue(type);
+	zenPage.getComponentById("SourceDescription").setValue(desc);
+	zenPage.getComponentById("JSON").setValue(json);
+	zenPage.getComponentById("QRData").setValue(qrdata);
+	//zenPage.getComponentById("QRImage").setValue(qruri);
+	document.getElementById("QRImage").firstChild.src=qruri;
+ 
+	 
+	zen('mgAppDetails').show('Smart Card Details','','',100,100,900,560);
+]]></Implementation>
+</Method>
+
+<Method name="DrawTitle">
+<FormalSpec>pSeed:%String</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	
+	Set %session.Data("SmartCard.Format") = ""
+	Set %session.Data("SmartCard.PayLoad") = ""
+	
+	Set tTitle = $$$TextHTML("Installer Wizard")
+	Set tSC = %application.DrawHSTitle(tTitle,"Installer")
+	Quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="OldDrawTitle">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>pSeed:%String</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	Set LOGOIMAGE1 = ##class(%CSP.Page).Link("/csp/hslib/images/logo-topl-healthshare_01.gif")
+	Set LOGOIMAGE2 = ##class(%CSP.Page).Link("/csp/hslib/images/logo-topl-healthshare_02.gif")
+	Set LOGOIMAGE3 = ##class(%CSP.Page).Link("/csp/hslib/images/logo-topl-healthshare_03.jpg")
+
+	&html<
+<table class="HSTitle" width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="205"><a href="http://www.intersystems.com/index.html"><img src="#(LOGOIMAGE1)#" alt="InterSystems HealthShare" width="205" height="78" border="0"></a></td>
+    <td width="185"><a href="http://www.intersystems.com/index.html"><img src="#(LOGOIMAGE2)#" alt="Innovations" width="185" height="78" border="0"></a></td>
+    <td width="370"><a href="http://www.intersystems.com/index.html"><img src="#(LOGOIMAGE3)#" alt="Health information exchange platform" width="370" height="78" border="0"></a></td>
+    <td width="100%" align="right">
+    &nbsp;&nbsp;
+    </td>
+    <td width="20">&nbsp;</td>
+  </tr>
+</table>	
+	>
+	Quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="SendToFHIR">
+<FormalSpec>baseURL,pExport=0</FormalSpec>
+<ReturnType>%String</ReturnType>
+<ZenMethod>1</ZenMethod>
+<Implementation><![CDATA[
+	set tSC=$$$OK
+	set tReadLen = $Select($system.SYS.MaxLocalLength()=3641144:3640000,1:32000)
+	
+	Set tEndpoint = %page.%GetValueById("cmbEndpoint")
+	If tEndpoint="" &js<alert('Please choose end point')> Quit
+	
+	Set tFormat = %page.%GetValueById("cmbFormat")
+	If tFormat="" &js<alert('Please choose a FHIR format')> Quit
+	
+	set tMRN=%page.%GetValueById("txtMRN")
+	If tMRN="" &js<alert('Please enter MRN')> Quit
+	
+
+	
+	set currentNS = $Namespace
+	set tEndpointNamespace=##class(TCITK.Utils).GetEndpointNamespace(tEndpoint)  	
+	set tFHIRVersion=##class(TCITK.Utils).GetEndpointFHIRVersion(tEndpoint)  	
+	zn tEndpointNamespace
+	
+	
+	
+	if ((tFHIRVersion="DSTU2") || (tFHIRVersion="STU3"))
+	{
+		set tRequest = ##class(HS.Message.FHIR.Request).%New()
+	}
+	else
+	{
+		set tRequest   = ##class(HS.FHIRServer.Interop.Request).%New() 
+	}
+	
+	set tAction="Patient Read"
+	set tRequestURL=tEndpoint
+	set tRequestURL=tRequestURL_"/SmartCard/"_tMRN
+	set ResourcePath=""
+	
+	
+	/*
+	Set tResource = %page.%GetValueById("cmbResource")
+	if tResource'="Patient"
+	{
+		set tRequestURL=tRequestURL_"/"_tResource
+		set ResourcePath=ResourcePath_"/"_tResource
+	}
+	*/
+	 
+	set tQueryString="_format="_tFormat
+	set tRequestURL=tRequestURL_"?"_tQueryString
+	Set ..%GetComponentById("txtFHIRURL").value = baseURL_tRequestURL
+ 
+ 	if pExport=1
+ 	{
+	 	 zn currentNS
+	 	q ##class(TCITK.UI.Postman).GetJSON(baseURL_tRequestURL,tEndpoint,tAction,tFHIRVersion)
+ 	}
+ 
+ 
+ 		Set %session.Data("SmartCard.Format") = ""
+		Set %session.Data("SmartCard.PayLoad") = ""
+
+		set tServiceName="InteropService."_tFHIRVersion
+		set tAPIRequest  = ##class(HS.FHIRServer.API.Data.Request).%New()
+		set tAPIRequest.SessionApplication=tEndpoint
+		set tAPIRequest.RequestMethod="GET"
+		set tAPIRequest.RequestPath="SmartCard"_"/"_tMRN 
+		set tAPIRequest.ResponseFormatCode=$zconvert(tFormat,"U")
+		set tAPIRequest.QueryString="" //tQueryString
+		 
+		set tRequest.Request=tAPIRequest
+		// Construct the business service
+		set tSC =##class(Ens.Director).CreateBusinessService(tServiceName, .tService) 
+		q:$$$ISERR(tSC) tSC
+		// Now, process it
+		set tSC =tService.ProcessInput(tRequest, .tResponse) 
+		do ..UpdateTrace(tRequest,tServiceName,baseURL,tEndpointNamespace)
+		q:$$$ISERR(tSC) tSC
+		q:$g(tResponse)="" "Error: Empty Response"_tSC
+		
+		if +tResponse.Response.Status>399 &js<alert('#(tResponse.Response.Status)#')>
+	 	If tResponse.QuickStreamId'="" {
+			Set tResponseStream = ##class(HS.SDA3.QuickStream).%OpenId(tResponse.QuickStreamId)		
+		}
+	 	set tResponseResult=tResponseStream.Read(tReadLen)
+		
+	 
+		Set %session.Data("SmartCard.Format") = $zconvert(tFormat,"U")
+		Set %session.Data("SmartCard.PayLoad") = tResponseResult
+	
+	
+	
+	
+	
+	 zn currentNS
+ 	quit tResponseResult
+	
+	if $$$ISERR(tSC) { &js<alert('#($system.Status.GetOneErrorText(tSC))#')> }
+]]></Implementation>
+</Method>
+
+<Method name="UpdateTrace">
+<FormalSpec>tRequest,tServiceName,baseURL,tEndpointNamespace</FormalSpec>
+<Implementation><![CDATA[
+	set tRequestID=tRequest.%Id()
+ 	set tRequestClass=tRequest.%ClassName()
+ 	set SessionId=""
+	&sql(Select ID Into :SessionId From Ens.MessageHeader where  MessageBodyId = :tRequestID  and sourceconfigname=:tServiceName)
+	set tURL=baseURL_"/csp/healthshare/"_tEndpointNamespace_"/EnsPortal.VisualTrace.zen?SESSIONID="_SessionId
+	Set ..%GetComponentById("linkTrace").title = tURL
+	Set ..%GetComponentById("linkTrace").href = "#"
+	Set ..%GetComponentById("linkTrace").onclick = "javascript:zenPage.openVisualTrace('"_tURL_"')"
+	Set ..%GetComponentById("linkTrace").disabled = 0
+	Set ..%GetComponentById("linkTrace").target = "_blank"
+	quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="openVisualTrace">
+<FormalSpec>url=""</FormalSpec>
+<Language>javascript</Language>
+<ClientMethod>1</ClientMethod>
+<Implementation><![CDATA[	window.open(url);
+]]></Implementation>
+</Method>
+
+<Method name="Send">
+<FormalSpec>pExport=0</FormalSpec>
+<Language>javascript</Language>
+<ClientMethod>1</ClientMethod>
+<Implementation><![CDATA[
+	var baseURL=window.location.protocol+"//"+window.location.hostname;
+	if (window.location.port=="")
+	{}
+	else
+	{
+		baseURL=baseURL+":"+window.location.port;	
+	}
+	zenPage.getComponentById("txtFHIRURL").setValue(baseURL);
+	zenPage.getComponentById("txtFHIRAuth").setValue("Basic *********************");
+	if (pExport==0)
+	{
+		zenPage.getComponentById("txtResponse").setValue("");
+		zenPage.getComponentById("txtResponse").setValue("....Running");
+	}
+	var result=zenPage.SendToFHIR(baseURL,pExport);
+	
+	if (pExport==0)
+	{
+
+		
+		try 
+		{
+	 		var tFormat=zenPage.getComponentById("cmbFormat").getValue();
+	 		
+	 		
+	 		
+	 		if (tFormat=="json")
+	 		{
+		 		var jsonPretty = JSON.stringify(JSON.parse(result),null,2);  
+		 		zenPage.getComponentById("txtResponse").setValue(jsonPretty);
+	 		}
+	 		else if (tFormat=="xml")
+	 		{
+	 			zenPage.getComponentById("txtResponse").setValue(result);
+		 		var xmlPretty = zenPage.formatXml(result);
+		 		zenPage.getComponentById("txtResponse").setValue(xmlPretty);
+	 		}
+	 		else
+	 		{
+				zenPage.getComponentById("txtResponse").setValue(result);
+	 		}
+	 		
+	 		var table = zenPage.getComponentById('table');
+			table.refreshTable();
+	 		
+		}
+		catch(exp)
+		{
+			zenPage.getComponentById("txtResponse").setValue(result);
+		}
+	}
+	else
+	{
+		var jsonPretty = JSON.stringify(JSON.parse(result),null,2);  
+		var jsonData=JSON.parse(result);
+		var filename=jsonData.info.filename;
+		var file = new Blob([jsonPretty], {type: 'application/json'});
+		 var a = document.createElement('a');
+            	a.href = URL.createObjectURL(file);
+           	 a.download = filename;
+            	a.click();
+	}
+]]></Implementation>
+</Method>
+
+<Method name="formatXml">
+<FormalSpec>xml,tab</FormalSpec>
+<Language>javascript</Language>
+<ClientMethod>1</ClientMethod>
+<Implementation><![CDATA[
+ // tab = optional indent value, default is tab (\t)
+    var formatted = '', indent= '';
+    tab = tab || '\t';
+    xml.split(/>\s*</).forEach(function(node) {
+        if (node.match( /^\/\w/ )) indent = indent.substring(tab.length); // decrease indent by one 'tab'
+        formatted += indent + '<' + node + '>\r\n';
+        if (node.match( /^<?\w[^>]*[^\/]$/ )) indent += tab;              // increase indent
+    });
+    return formatted.substring(1, formatted.length-3);
+]]></Implementation>
+</Method>
+
+<Method name="%OnAfterCreatePage">
+<Description>
+If license is not in place, show message and hide everything.</Description>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	Set tCombo=..%GetComponentById("cmbFormat")
+	Set tCombo.valueList=",xml,json"
+	Set tCombo.displayList=tCombo.valueList 
+	Set tCombo.value="json"
+	
+	Set tResources=..%GetComponentById("cmbResource")
+	Set tResources.valueList="All"
+	Set tResources.displayList="All"
+	Set tResources.value="All"
+	
+ 
+	
+	Quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="onloadHandler">
+<Description>
+When the page is loaded, put cursor where it belongs.</Description>
+<Language>javascript</Language>
+<ClientMethod>1</ClientMethod>
+</Method>
+
+<Method name="CreateFHIRSEndpointRS">
+<FormalSpec>*tSC:%Status,pInfo:%ZEN.Auxiliary.QueryInfo</FormalSpec>
+<ReturnType>%ResultSet</ReturnType>
+<Implementation><![CDATA[
+	Set tSQL="call TCITK_UI.Query_FHIRSEndpointQuery('R4') "
+	Set tRS= ##class(%SQL.Statement).%ExecDirect("",tSQL)
+	Set tSC=$S(tRS.SQLCODE=0:$$$OK,1:$$$ERROR($$$GeneralError,"SQLCODE:"_tRS.SQLCODE))
+    	Set pInfo.queryExecuted=1
+	Quit tRS
+]]></Implementation>
+</Method>
+
+<Method name="CreateSmartCardRS">
+<FormalSpec>*tSC:%Status,pInfo:%ZEN.Auxiliary.QueryInfo</FormalSpec>
+<ReturnType>%ResultSet</ReturnType>
+<Implementation><![CDATA[
+	Set tSQL="call TCITK_UI.Query_SmartCardResultQuery() "
+	Set tRS= ##class(%SQL.Statement).%ExecDirect("",tSQL)
+	Set tSC=$S(tRS.SQLCODE=0:$$$OK,1:$$$ERROR($$$GeneralError,"SQLCODE:"_tRS.SQLCODE))
+    	Set pInfo.queryExecuted=1
+	Quit tRS
 ]]></Implementation>
 </Method>
 </Class>
