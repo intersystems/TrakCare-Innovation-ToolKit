@@ -1,11 +1,6 @@
-FROM store/intersystems/irishealth-community:2021.1.0.215.3
+FROM docker.io/intersystems/irishealth-community:2022.1.0.209.0
 #FROM store/intersystems/irishealth-community:2021.2.0.649.0
 LABEL maintainer="Eslam Farahat <eslam.farahat@intersystems.com>"
-
-#https://hub.docker.com/_/intersystems-iris-for-health/plans/80ae1325-d535-484e-8307-b643c2865dd8?tab=instructions
-#FROM store/intersystems/irishealth-community:2020.4.0.547.0
-#FROM store/intersystems/iris-community:2021.1.0.215.3
-
 
 # Varaibles
 ARG link
@@ -31,7 +26,7 @@ RUN mkdir $_HTTPD_DIR/ssl && openssl req -x509 -nodes -days 1 -newkey rsa:2048 -
 COPY ./cspgateway/ /opt/cspgateway/bin
 RUN cp /usr/irissys/csp/bin/CSPa24.so /opt/cspgateway/bin
 RUN cp /usr/irissys/csp/bin/CSPa24Sys.so /opt/cspgateway/bin
-RUN cp /usr/irissys/csp/bin/libz.so /opt/cspgateway/bin
+#RUN cp /usr/irissys/csp/bin/libz.so /opt/cspgateway/bin
 
 COPY httpd-csp.conf $_HTTPD_DIR/sites-available
 

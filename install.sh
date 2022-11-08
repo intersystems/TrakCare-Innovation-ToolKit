@@ -36,12 +36,40 @@ Set source="$DirSrc"
 w !,"source path:",source
 set sc = \$system.OBJ.ImportDir(source,"*.cls;*.inc;*.mac;*.xml","cubk",.errors,1)
 zw errors
-do:(sc'=1) \$system.Process.Terminate(,1),h
+//do:(sc'=1) \$system.Process.Terminate(,1),h
 write "compile sources  done"
+
+
+write !,"make HS Lib R/W "
+
+
+try{
+  do ##class(TC.hmf.FHIR.Installer.Abstract).EnableHSLib()
+  set sc = \$system.OBJ.ImportDir(source,"*.cls;*.inc;*.mac;*.xml","cubk",.errors,1)
+  zw errors
+}
+catch
+{
+}
 
 write !,"start installing FHIR "
 
-do ##class(TC.hmf.FHIR.Installer.FHIR).InstallDemo(source)
+try
+{
+  do ##class(TC.hmf.FHIR.Installer.FHIR).InstallDemo(source)
+}
+catch
+{
+
+}
+
+zn "$NameSpace"
+
+write !,"compile landing namespace package"
+
+set tSC = $system.OBJ.CompilePackage( "TC.hmf","ck")
+set tSC = $system.OBJ.CompilePackage( "TCITK","ck")
+set tSC = $system.OBJ.CompilePackage( "TrakCare","ck")
 
 write !,"installing FHIR completed"
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2021.2 (Build 649U)" ts="2022-04-29 10:26:39">
+<Export generator="IRIS" version="26" zv="IRIS for UNIX (Ubuntu Server LTS for x86-64 Containers) 2022.2 (Build 368U)" ts="2022-11-07 02:21:43">
 <Class name="%ZHS.HC.OAuth2.Utils">
 <TimeChanged>66167,32105.175025</TimeChanged>
 <TimeCreated>66167,32105.175025</TimeCreated>
@@ -27876,8 +27876,22 @@ This Parameter is updated by Perforce</Description>
 
 <Class name="TC.hmf.FHIR.Installer.Abstract">
 <Super>HS.HC.Util.Installer</Super>
-<TimeChanged>66162,66986.1468791</TimeChanged>
+<TimeChanged>66420,8270.8462104</TimeChanged>
 <TimeCreated>66162,49365.7065973</TimeCreated>
+
+<Method name="EnableHSLib">
+<ClassMethod>1</ClassMethod>
+<Implementation><![CDATA[
+
+	//do ##class(TC.hmf.FHIR.Installer.Abstract).EnableHSLib()
+	Set tCurrentNS = $Namespace
+	zn "%SYS"
+	Set db=##Class(SYS.Database).%OpenId("/usr/irissys/mgr/hslib/")
+	Set db.ReadOnly=0
+	Set status=db.%Save()
+	Set $namespace = tCurrentNS
+]]></Implementation>
+</Method>
 
 <Method name="GetOauth2ClinetName">
 <ClassMethod>1</ClassMethod>
@@ -31160,7 +31174,7 @@ This Parameter is updated by Perforce</Description>
 FHIR REST Handler</Description>
 <IncludeCode>HS.FHIRServer,Ensemble</IncludeCode>
 <Super>HS.FHIRServer.RestHandler,TC.hmf.FHIR.REST.Abstract</Super>
-<TimeChanged>66182,2874.235992</TimeChanged>
+<TimeChanged>66420,8416.7801896</TimeChanged>
 <TimeCreated>65468,76524.400479</TimeCreated>
 
 <XData name="UrlMap">
@@ -31185,7 +31199,6 @@ dispatched to each of the handler-methods in this class.</Description>
 <ClassMethod>1</ClassMethod>
 <FormalSpec>pappKey,pappURL</FormalSpec>
 <Implementation><![CDATA[
-	//do ##class(TC.hmf.FHIR.REST.Handler).GetCapabilityStatement("/v2/tcfhir/r4","/v2/tcfhir/r4/metadata")
 	set capabilityStatement = ##class(HS.FHIRServer.Tools.CapabilityTemplate).BuildFull(pappKey)
 	set capabilityStatement.url = pappURL
 	set capabilityStatement.implementation.url = pappURL
@@ -31249,364 +31262,6 @@ get FHIR SMART capability </Description>
 		quit 1
 	}
 	return $$$OK
-]]></Implementation>
-</Method>
-
-<Method name="processRequest">
-<Description>
-
-Process an inbound request.  This hands off the incoming request to the business service.
-</Description>
-<ClassMethod>1</ClassMethod>
-<FormalSpec>pRequestPath:%String</FormalSpec>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
-	#dim %request as %CSP.Request
-	#dim %hsrestconfig as HS.Util.RESTCSPConfig
-	
-	set appKey = $$$AppKeyFromApp(%request.Application)
-	set serviceConfig = ##class(HS.FHIRServer.API.InteractionsStrategy).GetServiceConfigDataForEndpoint(appKey)
-	
-	// Do some Logging
-	set tMethodDesc = "["_$classname()_":"_$get(%methodname)_"]"
-	do ..LogCSPRequest(tMethodDesc, 1)
-
-	// The only unauthenticated interaction allowed is metadata
-	if ( '..IsRequestAuthenticated() && (pRequestPath '= "metadata")) {
-		set isNoAuthAllowed = (serviceConfig.DebugMode \ $$$FHIRDebugAllowNoAuthCheck # 2)
-		if 'isNoAuthAllowed {
-			//	Set %response.Status = ..#HTTP401UNAUTHORIZED
-			//	Return $$$OK
-		}
-	}
-	// This flag tells the Outcome processor to emit a stack trace.  We don't want
-	// to do this in production.
-	set %FHIRDebugIncludeTracebacks = (serviceConfig.DebugMode \ $$$FHIRDebugIncludeTracebacks # 2)
-
-	// Next Build a Request object from the Http Request and parsed URL
-	#dim tRequest as HS.FHIRServer.API.Data.Request = ##class(HS.FHIRServer.API.Data.Request).%New()
-	#dim tResponse as HS.FHIRServer.API.Data.Response = ""
-	#dim outputStream as %Stream.Object = ##class(HS.FHIRServer.Util.DeviceStream).%New()
-
-	
-
-	// Initialize the FHIRRequest
-	set tRequest.RequestPath = pRequestPath
-	// Populate information from the Http request
-	
-	
-	
-	do ..marshallRequestFromHttp(tRequest)
-	
-	
-	
-	if (..ISOAuthRequired() &&('..IsRequestAuthenticated()))
-	{
-		set tStatus = ..ValidateOAuthToken("", .tOAuthSessionId, .tJWTString, .tJWTObj)
-		
-		if $$$ISERR(tStatus)
-		{
-			
-			set %response.Status = ..#HTTP401UNAUTHORIZED
-			quit 1
-		}
-		set patID = ##class(%DynamicAbstractObject).%FromJSON(tJWTString).%Get("patient")
-		// try access another patient with same token error 404
-		
-		
-		
-		if $piece(pRequestPath,"/",1)="Patient",patID'=$piece(pRequestPath,"/",2)
-		{
-			do ..ReportHttpStatusCode(..#HTTP401UNAUTHORIZED)
-		}
-		
-		
-		
-		do tRequest.AdditionalInfo.SetAt(patID, "patient")
-		do tRequest.AdditionalInfo.SetAt(tOAuthSessionId, "OAuthSessionId")
-		//Do tRequest.AdditionalInfo.SetAt(tJWTString, "JSONWebToken") // rely on internal oauth2 validation
-		
-		Set accessToken = ##class(%SYS.OAuth2.AccessToken).GetAccessTokenFromRequest(.tSC)
-		$$$ThrowOnError(tSC)
-		If accessToken '= "" {
-			Do tRequest.AdditionalInfo.SetAt(accessToken, "USER:OAuthToken")
-			Do tRequest.AdditionalInfo.SetAt(%hsrestconfig.OAuthClientName, "USER:OAuthClient")
-		}
-	}
-	
-	
-	
-	if (%hsrestconfig.ServiceConfigName '= "") {
-		// Take the alternate path through a Production
-		set tStatus=..dispatchToEnsemble(tRequest)
-		if %response.Status=404
-		{
-			//set %response.Status=200
-			//return $$$OK	
-		}
-		 
-		return tStatus
-	}
-	
-	try {
-		// Process Protocol rules for Accept and Content-Type Headers.
-		// Check Accept (Output) first, to cover the case where Accept
-		// is valid but Content-Type is not, so we can know the format
-		// for the OperationOutcome for the invalid Content-Type.
-		set tRequest.ResponseFormatCode =  ..determineOutputFormatCode()
-		set tRequest.RequestFormatCode =  ..determineInputFormatCode()
-		$$$FSLog("RequestType: "_tRequest.RequestFormatCode_", ResponseType: "_tRequest.ResponseFormatCode)
-		
-		set fhirService = ##class(HS.FHIRServer.Service).EnsureInstance(appKey)
-
-		// We have a well formed Request now.  We send it either to the FHIR Service or to Ensemble
-		set tStatus = $$$OK
-		// Dispatch Directly to a FHIR Service
-		//$$$FSLog("Call Service;  Interaction="_tRequest.Interaction_", Type="_tRequest.Type_", User: "_$Username_", Roles: "_$Roles)
-		//$$$FSLog("Content: "_%request.Content_", code: "_tRequest.RequestFormatCode_ " -> "_tRequest.ResponseFormatCode)
-
-		// Convert any payload into a JSON object
-		if $isobject(%request.Content) {
-			set tRequest.Json = fhirService.StreamToJSON(%request.Content, tRequest.RequestFormatCode)
-		}
-		do fhirService.DispatchRequest(tRequest, .tResponse)
-		$$$FSLog("Response Status: "_tResponse.Status_ ", Json: "_$select(tResponse.Json="":"<None>", 1:tResponse.Json.resourceType))
-		
-		// Process the FHIR response back to the calling REST client
-		do ..marshallResponseHeaders(tResponse)
-		
-		do ..WriteServiceResponse(tResponse, fhirService, outputStream, .%response)
-		
-	} catch (tEx) {
-		set tStatus = tEx.AsStatus()
-		set outcome = ##class(HS.FHIRServer.Util.Outcome).CreateFromStatus(tStatus, .httpStatus)
-		set %response.Status = httpStatus
-		if $get(tResponse)="" {
-			set tResponse = tRequest.NewResponse()
-			set tResponse.ResponseFormatCode = tRequest.ResponseFormatCode
-			set tResponse.IsPrettyOut = 1
-			set tResponse.Json = outcome
-		}
-		do ..WriteServiceResponse(tResponse, $get(fhirService), outputStream, .%response)
-	}
-	
-	do ..LogCSPResponse(tMethodDesc, 1)
-	return $$$OK
-]]></Implementation>
-</Method>
-
-<Method name="marshallRequestFromHttp">
-<Description>
-
-Marshall the incoming FHIR REST request into a message ready for dispatch to the FHIR business service
-</Description>
-<Internal>1</Internal>
-<ClassMethod>1</ClassMethod>
-<FormalSpec>pRequest:HS.FHIRServer.API.Data.Request</FormalSpec>
-<Implementation><![CDATA[
-	#dim tStatus as %Status = $$$OK
-	
-	#dim tKey as %String
-	#dim tSubKey as %String
-	#dim tItem as %String
-	#dim tHeader as %String
-	#dim %request as %CSP.Request
-
-	set pRequest.RequestMethod = %request.Method
-	// %request.Application is the request base URL including the URLPrefix, if there is one.
-	set tBaseURL = %request.Application
-	// Strip trailing '/'
-	if $extract(tBaseURL, *)="/" set tBaseURL = $extract(tBaseURL, 1, *-1)
-
-	
-	//   Note - If the request came through a proxy, we should build the URL that goes to the proxy.
-	set pRequest.BaseURL = %request.GetCgiEnv("REQUEST_SCHEME","HTTPS")_"://"_%request.CgiEnvs("HTTP_HOST")_tBaseURL
-	// Set pRequest.RequestPath ="/"_$Extract(%request.URL, $Length(%request.Application)+1,*)
-	set pRequest.QueryString = %request.GetCgiEnv("QUERY_STRING","")
-	
-	 // eslam change beneficiary to patient
-	 //set pRequest.QueryString=$replace(pRequest.QueryString,"beneficiary=","patient=")
-	
-	
-	//eslamr4 fix the issues with subject comes without patient
-	if $find(pRequest.QueryString,"subject")>0,$find(pRequest.QueryString,"=")>0,$find(pRequest.QueryString,"/")=0
-	{
-		set pRequest.QueryString=$p(pRequest.QueryString,"=",1)_"=Patient/"_$p(pRequest.QueryString,"=",2)
-	}
-	//eslamr4 replace name with family name 
-	if $find(pRequest.QueryString,"name=")>0,pRequest.RequestPath="Patient"
-	{
-		set pRequest.QueryString=$replace(pRequest.QueryString,"name=","family=")
-	}
-	
-	
-	// If the body is form data, capture it
-	if (%request.ContentType = "application/x-www-form-urlencoded") {
-		// CSP combines the Query Parameters from the URL with any FORM Data, so we must
-		// reconstruct the full string
-		set pRequest.QueryString = ##class(HS.FHIRServer.API.Data.QueryParameters).CreateFromCSPRequest(%request).AsString()
-	}
-	
-	
-
-	// So far, only DSTU2 uses Conformance, all others (STU3 for now) use Capability
-	// The Session Application is the CSP App Key (the trailing slash is removed)
-	set pRequest.SessionApplication = $$$AppKeyFromApp(%request.AppMatch)
-	
-	// Copy in HTTP header values used in the FHIR API
-	set pRequest.IfNoneMatch = $get(%request.CgiEnvs("HTTP_IF_NONE_MATCH"))
-	set pRequest.IfModifiedSince = $get(%request.CgiEnvs("HTTP_IF_MODIFIED_SINCE"))
-	set pRequest.IfMatch = $get(%request.CgiEnvs("HTTP_IF_MATCH"))
-	set pRequest.IfNoneExist = $get(%request.CgiEnvs("HTTP_IF_NONE_EXIST"))
-	set pRequest.Prefer = $get(%request.CgiEnvs("HTTP_PREFER"))
-	
-	do pRequest.AdditionalInfo.SetAt(%request.CgiEnvs("REMOTE_ADDR"), "ClientAddr")
-	do pRequest.AdditionalInfo.SetAt(%request.Secure, "Secure")
-	do pRequest.AdditionalInfo.SetAt(%session.SessionId, "CSPSessionId")
-	
-	// For compatability, copy all HTTP_ headers into the AdditionalInfo section of the request
-	set tKey = ""
-	for {
-		set tKey = $order(%request.CgiEnvs(tKey))
-		quit:tKey=""
-		
-		if tKey?1"HTTP_"1.E {
-			// Determine the proper header name (will be all caps unfortunately)
-			set tHeader = $piece(tKey,"HTTP_",2,*)
-			
-			// Copy the HTTP headers
-			do pRequest.AdditionalInfo.SetAt(%request.CgiEnvs(tKey), "HEADER:"_tHeader)
-		}
-	}
-	
-	if ..IsRequestAuthenticated() {
-		do pRequest.AdditionalInfo.SetAt($username, "USER:UserID")
-		do pRequest.AdditionalInfo.SetAt($roles, "USER:Roles")
-	}
-]]></Implementation>
-</Method>
-
-<Method name="OnPreDispatch">
-<Description>
-OnPreDispatch overrides the same method from %CSP.Request.  If pContinue is set to 0,
-the request will NOT be dispatched according to the UrlMap. If this case it's the
-responsibility of the user to return a response.</Description>
-<ClassMethod>1</ClassMethod>
-<FormalSpec><![CDATA[pUrl:%String,pMethod:%String,&pContinue:%Boolean]]></FormalSpec>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
-	// Nothing to do here ....
-	set pContinue=1
-	
-	set appKey = $$$AppKeyFromApp(%request.Application)
-	set %hsrestconfig = ##class(HS.Util.RESTCSPConfig).URLIndexOpen(appKey)
-	
-	if ((..GetOAuthClient()="")||(..IsRequestAuthenticated()))
-	{
-		 quit 1
-	}
-	
-	#; metadata and OPTIONS are two ways of requesting the Conformance statement.
-	#; Conformance holds the authorization end point and token end point.
-	set tIsConformance = 0
-	if (%request.PageName="smart-configuration")&&(%request.CgiEnvs("REQUEST_METHOD")="GET") set tIsConformance = 1
-	if (%request.PageName="metadata")&&(%request.CgiEnvs("REQUEST_METHOD")="GET") set tIsConformance = 1
-	if %request.CgiEnvs("REQUEST_METHOD")="OPTIONS" set tIsConformance = 1
-	
-	// Present but blank Authorization header value will return an error. Aside from that,
-	// the absence of an access token will not give an error, and will just come back with
-	// tAccessToken="".
-	set tAccessToken = ##class(%SYS.OAuth2.AccessToken).GetAccessTokenFromRequest(.tStatus)
-	if $$$ISERR(tStatus) {
-		set pContinue = 0
-		if ..ReportHttpStatusCode(..#HTTP401UNAUTHORIZED)
-		quit 1
-	}
-	// Blank or missing access token is okay with a Conformance interaction, and is
-	// not okay if not a Conformance interaction. In either case for blank access
-	// token, no need for further processing.
-	if tAccessToken="" {
-		if 'tIsConformance {
-			set pContinue = 0
-			if ..ReportHttpStatusCode(..#HTTP401UNAUTHORIZED)
-		}
-		quit 1
-	}
-	
-	set tSC = $$$OK
-	set tStatus = $$$OK
-	set tReturn = ##class(%SYS.OAuth2.Validation).ValidateJWT(..GetOAuthClient(), tAccessToken, "", "", .tJWTObj, .tSecurityParams, .tSC)
-	
-	
-	
-	
-	if tReturn=0 {
-		// tSC of 8873 is OAuth2JWTNotValid, which is returned when it is a JWT
-		// (passes structural integrity and encryption, etc) AND it fails on aud,
-		// or exp, or iss, or scope.
-		if ($$$ISERR(tSC))&&((","_$system.Status.GetErrorCodes(tSC)_",")'[",8873,") {
-			// Does not appear to be a valid JWT, try GetIntrospection.
-			// An example of a tSC that gets us to this point is:
-			// ERROR #8896: No private key found for alg: RSA-OAEP.
-			
-			
-			
-			set tStatus = ##class(%SYS.OAuth2.AccessToken).GetIntrospection(..GetOAuthClient(), tAccessToken, .tJWTObj)
-			
-			
-		} else {
-			#; Is a JWT, but not valid.
-			set tStatus = tSC
-			quit 1
-		}
-	}
-	
-	// If GetIntrospection failed due to an error then return 401 Unauthorized.
-	if $$$ISERR(tStatus) {
-		set pContinue = 0
-		if ..ReportHttpStatusCode(..#HTTP401UNAUTHORIZED)
-		quit 1
-	}
-	
-	
-	
-	
-	// If GetIntrospection returned a JWT then check the JWT "active" property.
-	// If GetIntrospection detects invalid access token then it returns active=false.
-	
-	set ^zTRAK("HMF","FHIR","REST","json")=tJWTObj.%ToJSON()
-	
-	if $isobject($get(tJWTObj)) {
-		if (tJWTObj.active'="")&&(tJWTObj.active=0) {
-			set pContinue = 0
-			if ..ReportHttpStatusCode(..#HTTP401UNAUTHORIZED)
-			set ^zTRAK("HMF","FHIR","REST","status")="inactive token"
-			quit 1
-		} else {
-			set tMatched = ##class(HS.FHIR.Utils).ValidateAudience(tJWTObj)
-			if 'tMatched,..GetOAuthAudRequired()=1 {
-				set pContinue = 0
-				set ^zTRAK("HMF","FHIR","REST","status")="invalid aud"
-				if ..ReportHttpStatusCode(..#HTTP401UNAUTHORIZED)
-				quit 1
-			}
-			if tJWTObj.exp'="" {
-				if tJWTObj.exp < ##class(%OAuth2.Utils).TimeInSeconds($ztimestamp,0) {
-					set pContinue = 0
-					set ^zTRAK("HMF","FHIR","REST","status")="expired token"
-					if ..ReportHttpStatusCode(..#HTTP401UNAUTHORIZED)
-					quit 1
-				}
-			}
-			
-			set %accesstokenstring = tAccessToken
-			set %accesstokenjwtobj = tJWTObj
-		}
-	}
-	
-	
-	
-	quit $$$OK
 ]]></Implementation>
 </Method>
 
@@ -38085,7 +37740,7 @@ This Parameter is updated by Perforce</Description>
 
 
 
-<Project name="TCITK" LastModified="2022-04-28 19:07:13.5610314">
+<Project name="TCITK" LastModified="2022-11-07 01:39:15.7703565">
   <Items>
     <ProjectItem name="%ZHS.HC.OAuth2.Utils" type="CLS"></ProjectItem>
     <ProjectItem name="HS.Local.FHIR.DTL" type="PKG"></ProjectItem>
@@ -38230,7 +37885,7 @@ This Parameter is updated by Perforce</Description>
 This is the base class for HealthShare UI. Used by Forms and Installer under UI.</Description>
 <IncludeCode>HS.HC,%ZHSLIB,HS.HC.UI.Home</IncludeCode>
 <Super>%ZEN.Portal.Application</Super>
-<TimeChanged>66031,43428.7616495</TimeChanged>
+<TimeChanged>66420,7279.7220545</TimeChanged>
 <TimeCreated>65468,76496.395738</TimeCreated>
 
 <Parameter name="APPLICATIONNAME">
