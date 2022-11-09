@@ -8,9 +8,10 @@ https://client.intersystems.com/viewdocument/enabling-innovation
 ## Prerequisites
 
 	1-Docker & Docker Compose (This needed if you will use Docker Option ) .
-	2-TrakCare T2019+  .
-	3-Health Care Messaging Framework (HMF) installed and Running .
-	4-Good knowledge about IRIS for Health and FHIR .
+	2-TrakCare T2020+
+	3-IRIS For Health 2021+ .
+	4-Health Care Messaging Framework (HMF) installed and Running .
+	5-Good knowledge about IRIS for Health and FHIR .
 
 * Innovation toolkit can be installed without docker , check the end of the guide if you want to install without docker
 
