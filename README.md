@@ -112,8 +112,9 @@ Login : SuperUser/password
 
 ## Install without Docker
 
-*you will need to have IRIS for Health 2020.2+ and valid license \
-**you will need to enabled HTTPS in your server so Oauth2 and smart apps can work
+* you will need to have IRIS for Health 2020.2+ and valid license \
+** you will need to enabled HTTPS in your server so Oauth2 and smart apps can work
+*** make HSLIB database writable by mounting it as read-write.
 
     1- login in terminal
 
