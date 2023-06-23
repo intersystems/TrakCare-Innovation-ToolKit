@@ -1,5 +1,11 @@
-FROM docker.io/intersystems/irishealth-community:2022.1.0.209.0
-#FROM store/intersystems/irishealth-community:2021.2.0.649.0
+ARG irisversion=intersystems/irishealth-community:2023.1.0.235.1
+FROM docker.io/$irisversion
+#----- ARM
+#docker-compose build --build-arg irisversion="intersystems/irishealth-community-arm64:2023.1.0.235.1"
+#----- X64
+#docker-compose build --build-arg irisversion="intersystems/irishealth-community:2023.1.0.235.1"
+#docker.io/intersystems/irishealth-community:2023.1.0.235.1
+#docker.io/intersystems/irishealth-community-arm64:2023.1.0.235.1
 LABEL maintainer="Eslam Farahat <eslam.farahat@intersystems.com>"
 
 # Varaibles
