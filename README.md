@@ -17,7 +17,14 @@ https://client.intersystems.com/viewdocument/enabling-innovation
 
 ## Install with Docker
 
-docker-compose up --build
+
+X64
+
+docker-compose build --build-arg irisversion="intersystems/irishealth-community:2023.1.0.235.1"
+
+ARM
+
+docker-compose build --build-arg irisversion="intersystems/irishealth-community-arm64:2023.1.0.235.1"
 
 
 
