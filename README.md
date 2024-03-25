@@ -1,3 +1,5 @@
+:warning: **Deprecated**: The Innovation Toolkit has been deprecated as its functionality has been integrated into TrakCare T2023 and later versions. Please note that this repository will no longer be updated. For those working with TrakCare versions T2023 and beyond, the incorporated features can now be directly utilized within the platform.
+
 # TrakCare Innovation ToolKit
 
 ## Walkthrough Video
